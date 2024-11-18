@@ -36,7 +36,7 @@ CREATE TABLE studentuser (
     studentID NUMBER PRIMARY KEY,
     age NUMBER(2) NOT NULL,
     address VARCHAR2(50) NOT NULL,
-    studentType VARCHAR2(13) NOT NULL,
+    studenttype VARCHAR2(13) NOT NULL,
     status VARCHAR2(1) NOT NULL,
     username VARCHAR2(20) NOT NULL,
     admissiondate DATE NOT NULL,
@@ -56,19 +56,19 @@ CREATE TABLE underGraduateStudent (
 );
 
 CREATE TABLE course (
-    courseNumber NUMBER PRIMARY KEY,
+    coursenumber NUMBER PRIMARY KEY,
     courseTitle VARCHAR2(20) NOT NULL,
     creditHours NUMBER(1) NOT NULL
 );
 
 CREATE TABLE section (
     sectionID NUMBER PRIMARY KEY,
-    courseNumber NUMBER NOT NULL,
+    coursenumber NUMBER NOT NULL,
     schedule VARCHAR2(20) NOT NULL,
     semester VARCHAR2(20) NOT NULL,
     enrollmentDeadline DATE NOT NULL,
     capacity NUMBER(3) NOT NULL,
-    FOREIGN KEY (courseNumber) REFERENCES course(courseNumber) ON DELETE CASCADE
+    FOREIGN KEY (coursenumber) REFERENCES course(coursenumber) ON DELETE CASCADE
 );
 
 CREATE TABLE enroll (
@@ -81,11 +81,11 @@ CREATE TABLE enroll (
 );
 
 CREATE TABLE prerequisiteCourse (
-    courseNumber NUMBER NOT NULL,
-    prerequisiteCourseNumber NUMBER NOT NULL,
-    PRIMARY KEY (courseNumber, prerequisiteCourseNumber),
-    FOREIGN KEY (courseNumber) REFERENCES course(courseNumber) ON DELETE CASCADE,
-    FOREIGN KEY (prerequisiteCourseNumber) REFERENCES course(courseNumber) ON DELETE CASCADE
+    coursenumber NUMBER NOT NULL,
+    prerequisitecoursenumber NUMBER NOT NULL,
+    PRIMARY KEY (coursenumber, prerequisitecoursenumber),
+    FOREIGN KEY (coursenumber) REFERENCES course(coursenumber) ON DELETE CASCADE,
+    FOREIGN KEY (prerequisitecoursenumber) REFERENCES course(coursenumber) ON DELETE CASCADE
 );
 
 
@@ -96,9 +96,9 @@ INSERT INTO usertable VALUES ('Jane90', '2345', 'Jane', 'Deep', 'admin');
 INSERT INTO usertable VALUES ('Mike96', '3456', 'Mike', 'Smith', 'studentadmin');
 
 
-INSERT INTO studentuser VALUES ('Jhon23', to_date('12/01/2010', 'mm/dd/yyyy'));
+INSERT INTO studentuser VALUES ('12345678','22','20 S Bryant Ave, Edmond, OK 73034','Undergraduate','N','Jhon23', to_date('12/01/2010', 'mm/dd/yyyy'));
 INSERT INTO adminuser VALUES ('Jane90', to_date('10/31/2019', 'mm/dd/yyyy'));
-INSERT INTO studentuser VALUES ('Mike96', to_date('11/25/2016', 'mm/dd/yyyy'));
+INSERT INTO studentuser VALUES ('12345679','25','320 E Edwards, Edmond, OK 73034','Graduate','N','Mike96', to_date('5/30/2020', 'mm/dd/yyyy'));
 INSERT INTO adminuser VALUES ('Mike96', to_date('5/30/2020', 'mm/dd/yyyy'));
 
 COMMIT;
