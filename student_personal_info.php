@@ -5,8 +5,8 @@ $sessionid =$_GET["sessionid"];
 verify_session($sessionid);
 
 
-$sql = "SELECT studentID, firstname, lastname, age, address, studenttype, status, username " .
-       "FROM studentuser " .
+$sql = "SELECT studentID, firstname, lastname, age, address, studenttype, status, username, usertype " .
+       "FROM studentview " .
        "WHERE username = (SELECT username FROM usersession WHERE sessionid = '$sessionid')";
 
 $result_array = execute_sql_in_oracle ($sql);
@@ -23,12 +23,13 @@ if($values = oci_fetch_array ($cursor)){
 
   // saving the values in the variables
     $studentID = $values[0];
-    $name = $values[1]+" "+$values[2];
+    $name = $values[1] . " " . $values[2];
     $age = $values[3];
     $address = $values[4];
     $studenttype = $values[5];
     $status = $values[6];
-    $username = $values[7]
+    $username = $values[7];
+    $usertype = $values[8];
 }
 
 // Here we can generate the content of the welcome page
@@ -41,7 +42,7 @@ if($usertype == 'student' || $usertype == 'studentadmin'){
   echo("Age              : $age <br />");
   echo("Address          : $address <br />");
   echo("Student Type     : $studenttype <br />");
-  echo("Porbation Status : $status <br />");
+  echo("Probation Status : $status <br />");
   echo("Username         : $username <br />");
   echo("<br />");
   echo("<form method=\"post\" action=\"student.php?sessionid=$sessionid\">
