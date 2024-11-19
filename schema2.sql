@@ -57,12 +57,12 @@ CREATE TABLE underGraduateStudent (
 
 CREATE TABLE course (
     coursenumber NUMBER PRIMARY KEY,
-    courseTitle VARCHAR2(20) NOT NULL,
+    courseTitle VARCHAR2(35) NOT NULL,
     creditHours NUMBER(1) NOT NULL
 );
 
 CREATE TABLE section (
-    sectionID NUMBER PRIMARY KEY,
+    sectionID VARCHAR2(4) PRIMARY KEY,
     coursenumber NUMBER NOT NULL,
     schedule VARCHAR2(20) NOT NULL,
     semester VARCHAR2(20) NOT NULL,
@@ -73,8 +73,8 @@ CREATE TABLE section (
 
 CREATE TABLE enroll (
     studentID NUMBER NOT NULL,
-    sectionID NUMBER NOT NULL,
-    grade VARCHAR2(2) NOT NULL,
+    sectionID VARCHAR2(4) NOT NULL,
+    grade VARCHAR2(1) NOT NULL,
     PRIMARY KEY (studentID, sectionID),
     FOREIGN KEY (studentID) REFERENCES studentuser(studentID) ON DELETE CASCADE,
     FOREIGN KEY (sectionID) REFERENCES section(sectionID) ON DELETE CASCADE
@@ -90,15 +90,89 @@ CREATE TABLE prerequisiteCourse (
 
 
 
+INSERT INTO usertable VALUES ('jdeep', '1234', 'Jane', 'Deep', 'admin');
+INSERT INTO usertable VALUES ('ssmith', '2345', 'Steven', 'Smith', 'studentadmin');
+INSERT INTO usertable VALUES ('llivingstone', '3456', 'Liam', 'Livingstone', 'student');
+INSERT INTO usertable VALUES ('dwarner', '4567', 'David', 'Warner', 'student');
+INSERT INTO usertable VALUES ('mlabuschagne', '5678', 'Marnus', 'Labuschagne', 'student');
 
-INSERT INTO usertable VALUES ('Jhon23', '1234', 'Jhon', 'Doe', 'student');
-INSERT INTO usertable VALUES ('Jane90', '2345', 'Jane', 'Deep', 'admin');
-INSERT INTO usertable VALUES ('Mike96', '3456', 'Mike', 'Smith', 'studentadmin');
+
+INSERT INTO adminuser VALUES ('jdeep', to_date('07/25/2023', 'mm/dd/yyyy'));
+INSERT INTO studentuser VALUES ('12345678','22','20 S Bryant Ave, Edmond, OK 73034','Undergraduate','N','llivingstone', to_date('08/15/2023', 'mm/dd/yyyy'));
+INSERT INTO studentuser VALUES ('12345679','25','320 E Edwards, Edmond, OK 73034','Graduate','N','ssmith', to_date('01/15/2024', 'mm/dd/yyyy'));
+INSERT INTO adminuser VALUES ('ssmith', to_date('08/11/2024', 'mm/dd/yyyy'));
+INSERT INTO studentuser VALUES ('12345680','23','100 W Campbell St, Edmond, OK 73034','Undergraduate','N','dwarner', to_date('08/15/2023', 'mm/dd/yyyy'));
+INSERT INTO studentuser VALUES ('12345681','24','200 N Fretz Ave, Edmond, OK 73034','Graduate','N','mlabuschagne', to_date('01/15/2024', 'mm/dd/yyyy'));
 
 
-INSERT INTO studentuser VALUES ('12345678','22','20 S Bryant Ave, Edmond, OK 73034','Undergraduate','N','Jhon23', to_date('12/01/2010', 'mm/dd/yyyy'));
-INSERT INTO adminuser VALUES ('Jane90', to_date('10/31/2019', 'mm/dd/yyyy'));
-INSERT INTO studentuser VALUES ('12345679','25','320 E Edwards, Edmond, OK 73034','Graduate','N','Mike96', to_date('5/30/2020', 'mm/dd/yyyy'));
-INSERT INTO adminuser VALUES ('Mike96', to_date('5/30/2020', 'mm/dd/yyyy'));
+INSERT INTO underGraduateStudent VALUES ('12345678','Junior');
+INSERT INTO graduateStudent VALUES ('12345679','Intelligent Systems');
+INSERT INTO underGraduateStudent VALUES ('12345680','Senior');
+INSERT INTO graduateStudent VALUES ('12345681','Full Stack');
+
+
+INSERT INTO course VALUES ('1001', 'Algo Design and Implementation', '3');
+INSERT INTO course VALUES ('1002', 'Data Structures', '3');
+INSERT INTO course VALUES ('1101', 'Database Management', '3');
+INSERT INTO course VALUES ('1201', 'Operating Systems', '3');
+INSERT INTO course VALUES ('1202', 'Computer Networks', '3');
+INSERT INTO course VALUES ('1301', 'Software Engineering I', '3');
+INSERT INTO course VALUES ('1302', 'Software Engineering II', '3');
+INSERT INTO course VALUES ('1401', 'Graduate Project', '3');
+INSERT INTO course VALUES ('1402', 'Thesis', '6');
+INSERT INTO course VALUES ('1501', 'Front End Web Development', '3');
+INSERT INTO course VALUES ('1502', 'Cloud Web Apps Development', '3');
+INSERT INTO course VALUES ('1503', 'Mobile Apps Development', '3');
+INSERT INTO course VALUES ('1601', 'Concepts of AI', '3');
+INSERT INTO course VALUES ('1602', 'Algos of Machine Learning', '3');
+INSERT INTO course VALUES ('1603', 'Computer Application in Statistics', '3');
+INSERT INTO course VALUES ('1604', 'Introduction to Robotics', '3');
+
+
+INSERT INTO section VALUES ('S101', '1001', 'MWF 10:00-11:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('S102', '1002', 'MWF 08:00-09:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('S103', '1101', 'MWF 13:00-14:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('S104', '1201', 'MW 16:00-17:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('S105', '1202', 'TR 09:00-10:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('S106', '1301', 'MWF 09:00-10:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('S107', '1302', 'TR 10:00-11:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('S109', '1402', 'W 14:00-16:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('S110', '1501', 'TR 12:00-13:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('S112', '1503', 'MWF 15:00-16:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('S114', '1602', 'TR 08:30-10:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('S115', '1603', 'MWF 09:30-10:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+
+INSERT INTO section VALUES ('S201', '1001', 'TF 09:00-10:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('S202', '1002', 'MW 10:30-12:00', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('S203', '1101', 'TF 12:00-13:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('S204', '1201', 'MWF 08:00-09:00', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('S205', '1202', 'MW 14:00-15:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('S206', '1301', 'TF 10:00-11:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('S209', '1402', 'W 14:00-16:00', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('S210', '1501', 'TR 08:00-09:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('S211', '1502', 'MWF 11:00-12:00', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('S213', '1601', 'MW 12:00-13:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('S116', '1604', 'TF 14:00-15:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+
+INSERT INTO section VALUES ('S302', '1002', 'MTr 09:00-10:30', 'Summer 2025', to_date('06/01/2025', 'mm/dd/yyyy'), '20');
+INSERT INTO section VALUES ('S310', '1501', 'TF 11:00-12:30', 'Summer 2025', to_date('06/01/2025', 'mm/dd/yyyy'), '20');
+
+
+INSERT INTO enroll VALUES (12345678, 'S101', 'A');  
+INSERT INTO enroll VALUES (12345678, 'S102', 'B'); 
+INSERT INTO enroll VALUES (12345678, 'S103', 'A'); 
+INSERT INTO enroll VALUES (12345679, 'S101', 'B');  
+INSERT INTO enroll VALUES (12345679, 'S106', 'A');  
+INSERT INTO enroll VALUES (12345679, 'S114', 'A');
+INSERT INTO enroll VALUES (12345680, 'S102', 'C');
+INSERT INTO enroll VALUES (12345680, 'S107', 'B');
+INSERT INTO enroll VALUES (12345680, 'S110', 'A'); 
+INSERT INTO enroll VALUES (12345681, 'S101', 'A');
+INSERT INTO enroll VALUES (12345681, 'S110', 'B'); 
+INSERT INTO enroll VALUES (12345681, 'S115', 'A');
+
+
+
+
 
 COMMIT;
