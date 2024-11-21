@@ -62,7 +62,7 @@ CREATE TABLE course (
 );
 
 CREATE TABLE section (
-    sectionID VARCHAR2(4) PRIMARY KEY,
+    sectionID VARCHAR2(6) PRIMARY KEY,
     coursenumber NUMBER NOT NULL,
     schedule VARCHAR2(20) NOT NULL,
     semester VARCHAR2(20) NOT NULL,
@@ -73,8 +73,8 @@ CREATE TABLE section (
 
 CREATE TABLE enroll (
     studentID NUMBER NOT NULL,
-    sectionID VARCHAR2(4) NOT NULL,
-    grade VARCHAR2(1) NOT NULL,
+    sectionID VARCHAR2(6) NOT NULL,
+    grade VARCHAR2(1),
     PRIMARY KEY (studentID, sectionID),
     FOREIGN KEY (studentID) REFERENCES studentuser(studentID) ON DELETE CASCADE,
     FOREIGN KEY (sectionID) REFERENCES section(sectionID) ON DELETE CASCADE
@@ -128,51 +128,91 @@ INSERT INTO course VALUES ('1602', 'Algos of Machine Learning', '3');
 INSERT INTO course VALUES ('1603', 'Computer Application in Statistics', '3');
 INSERT INTO course VALUES ('1604', 'Introduction to Robotics', '3');
 
+INSERT INTO section VALUES ('23S101', '1001', 'MWF 10:00-11:00', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('23S102', '1002', 'MWF 08:00-09:00', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('23S103', '1101', 'MWF 13:00-14:00', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('23S104', '1201', 'MW 16:00-17:30', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('23S105', '1202', 'TR 09:00-10:30', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('23S106', '1301', 'MWF 09:00-10:00', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('23S107', '1302', 'TR 10:00-11:30', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('23S109', '1402', 'W 14:00-16:00', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('23S110', '1501', 'TR 12:00-13:30', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('23S112', '1503', 'MWF 15:00-16:00', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('23S114', '1602', 'TR 08:30-10:00', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('23S115', '1603', 'MWF 09:30-10:30', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), '40');
 
-INSERT INTO section VALUES ('S101', '1001', 'MWF 10:00-11:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
-INSERT INTO section VALUES ('S102', '1002', 'MWF 08:00-09:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
-INSERT INTO section VALUES ('S103', '1101', 'MWF 13:00-14:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
-INSERT INTO section VALUES ('S104', '1201', 'MW 16:00-17:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
-INSERT INTO section VALUES ('S105', '1202', 'TR 09:00-10:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
-INSERT INTO section VALUES ('S106', '1301', 'MWF 09:00-10:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
-INSERT INTO section VALUES ('S107', '1302', 'TR 10:00-11:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
-INSERT INTO section VALUES ('S109', '1402', 'W 14:00-16:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
-INSERT INTO section VALUES ('S110', '1501', 'TR 12:00-13:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
-INSERT INTO section VALUES ('S112', '1503', 'MWF 15:00-16:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
-INSERT INTO section VALUES ('S114', '1602', 'TR 08:30-10:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
-INSERT INTO section VALUES ('S115', '1603', 'MWF 09:30-10:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('24S201', '1001', 'TF 09:00-10:30', 'Spring 2024', to_date('01/15/2024', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('24S202', '1002', 'MW 10:30-12:00', 'Spring 2024', to_date('01/15/2024', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('24S203', '1101', 'TF 12:00-13:30', 'Spring 2024', to_date('01/15/2024', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('24S204', '1201', 'MWF 08:00-09:00', 'Spring 2024', to_date('01/15/2024', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('24S205', '1202', 'MW 14:00-15:30', 'Spring 2024', to_date('01/15/2024', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('24S206', '1301', 'TF 10:00-11:30', 'Spring 2024', to_date('01/15/2024', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('24S209', '1402', 'W 14:00-16:00', 'Spring 2024', to_date('01/15/2024', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('24S210', '1501', 'TR 08:00-09:30', 'Spring 2024', to_date('01/15/2024', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('24S211', '1502', 'MWF 11:00-12:00', 'Spring 2024', to_date('01/15/2024', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('24S213', '1601', 'MW 12:00-13:30', 'Spring 2024', to_date('01/15/2024', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('24S116', '1604', 'TF 14:00-15:30', 'Spring 2024', to_date('01/15/2024', 'mm/dd/yyyy'), '35');
 
-INSERT INTO section VALUES ('S201', '1001', 'TF 09:00-10:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
-INSERT INTO section VALUES ('S202', '1002', 'MW 10:30-12:00', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
-INSERT INTO section VALUES ('S203', '1101', 'TF 12:00-13:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
-INSERT INTO section VALUES ('S204', '1201', 'MWF 08:00-09:00', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
-INSERT INTO section VALUES ('S205', '1202', 'MW 14:00-15:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
-INSERT INTO section VALUES ('S206', '1301', 'TF 10:00-11:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
-INSERT INTO section VALUES ('S209', '1402', 'W 14:00-16:00', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
-INSERT INTO section VALUES ('S210', '1501', 'TR 08:00-09:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
-INSERT INTO section VALUES ('S211', '1502', 'MWF 11:00-12:00', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
-INSERT INTO section VALUES ('S213', '1601', 'MW 12:00-13:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
-INSERT INTO section VALUES ('S116', '1604', 'TF 14:00-15:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
-
-INSERT INTO section VALUES ('S302', '1002', 'MTr 09:00-10:30', 'Summer 2025', to_date('06/01/2025', 'mm/dd/yyyy'), '20');
-INSERT INTO section VALUES ('S310', '1501', 'TF 11:00-12:30', 'Summer 2025', to_date('06/01/2025', 'mm/dd/yyyy'), '20');
-
-
-INSERT INTO enroll VALUES (12345678, 'S101', 'A');  
-INSERT INTO enroll VALUES (12345678, 'S102', 'B'); 
-INSERT INTO enroll VALUES (12345678, 'S103', 'A'); 
-INSERT INTO enroll VALUES (12345679, 'S101', 'B');  
-INSERT INTO enroll VALUES (12345679, 'S106', 'A');  
-INSERT INTO enroll VALUES (12345679, 'S114', 'A');
-INSERT INTO enroll VALUES (12345680, 'S102', 'C');
-INSERT INTO enroll VALUES (12345680, 'S107', 'B');
-INSERT INTO enroll VALUES (12345680, 'S110', 'A'); 
-INSERT INTO enroll VALUES (12345681, 'S101', 'A');
-INSERT INTO enroll VALUES (12345681, 'S110', 'B'); 
-INSERT INTO enroll VALUES (12345681, 'S115', 'A');
+INSERT INTO section VALUES ('24S302', '1002', 'MTr 09:00-10:30', 'Summer 2024', to_date('06/01/2024', 'mm/dd/yyyy'), '20');
+INSERT INTO section VALUES ('24S310', '1501', 'TF 11:00-12:30', 'Summer 2024', to_date('06/01/2024', 'mm/dd/yyyy'), '20');
 
 
+INSERT INTO section VALUES ('24S101', '1001', 'MWF 10:00-11:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('24S102', '1002', 'MWF 08:00-09:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('24S103', '1101', 'MWF 13:00-14:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('24S104', '1201', 'MW 16:00-17:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('24S105', '1202', 'TR 09:00-10:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('24S106', '1301', 'MWF 09:00-10:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('24S107', '1302', 'TR 10:00-11:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('24S109', '1402', 'W 14:00-16:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('24S110', '1501', 'TR 12:00-13:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('24S112', '1503', 'MWF 15:00-16:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('24S114', '1602', 'TR 08:30-10:00', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
+INSERT INTO section VALUES ('24S115', '1603', 'MWF 09:30-10:30', 'Fall 2024', to_date('08/15/2024', 'mm/dd/yyyy'), '40');
 
+INSERT INTO section VALUES ('25S201', '1001', 'TF 09:00-10:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('25S202', '1002', 'MW 10:30-12:00', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('25S203', '1101', 'TF 12:00-13:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('25S204', '1201', 'MWF 08:00-09:00', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('25S205', '1202', 'MW 14:00-15:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('25S206', '1301', 'TF 10:00-11:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('25S209', '1402', 'W 14:00-16:00', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('25S210', '1501', 'TR 08:00-09:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('25S211', '1502', 'MWF 11:00-12:00', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('25S213', '1601', 'MW 12:00-13:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+INSERT INTO section VALUES ('25S116', '1604', 'TF 14:00-15:30', 'Spring 2025', to_date('01/15/2025', 'mm/dd/yyyy'), '35');
+
+INSERT INTO section VALUES ('25S302', '1002', 'MTr 09:00-10:30', 'Summer 2025', to_date('06/01/2025', 'mm/dd/yyyy'), '20');
+INSERT INTO section VALUES ('25S310', '1501', 'TF 11:00-12:30', 'Summer 2025', to_date('06/01/2025', 'mm/dd/yyyy'), '20');
+
+
+INSERT INTO enroll VALUES (12345678, '23S101', 'A');  
+INSERT INTO enroll VALUES (12345678, '23S107', 'B'); 
+INSERT INTO enroll VALUES (12345678, '23S112', 'A'); 
+INSERT INTO enroll VALUES (12345678, '24S204', 'A'); 
+INSERT INTO enroll VALUES (12345678, '24S210', 'C'); 
+INSERT INTO enroll VALUES (12345678, '24S211', 'B'); 
+INSERT INTO enroll VALUES (12345678, '24S102', ''); 
+INSERT INTO enroll VALUES (12345678, '24S106', ''); 
+INSERT INTO enroll VALUES (12345678, '24S115', ''); 
+
+INSERT INTO enroll VALUES (12345679, '24S210', 'A');  
+INSERT INTO enroll VALUES (12345679, '24S203', 'B');  
+INSERT INTO enroll VALUES (12345679, '24S202', 'B');  
+INSERT INTO enroll VALUES (12345679, '24S102', '');  
+INSERT INTO enroll VALUES (12345679, '23S107', '');  
+INSERT INTO enroll VALUES (12345679, '24S104', '');  
+
+INSERT INTO enroll VALUES (12345680, '24S103', '');  
+INSERT INTO enroll VALUES (12345680, '23S102', '');  
+INSERT INTO enroll VALUES (12345680, '24S104', '');  
+
+INSERT INTO enroll VALUES (12345681, '24S202', 'A');  
+INSERT INTO enroll VALUES (12345681, '24S203', 'B');  
+INSERT INTO enroll VALUES (12345681, '24S204', 'B');  
+INSERT INTO enroll VALUES (12345681, '24S102', '');  
+INSERT INTO enroll VALUES (12345681, '24S105', '');  
+INSERT INTO enroll VALUES (12345681, '24S104', '');  
 
 
 COMMIT;
