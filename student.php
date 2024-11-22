@@ -56,6 +56,10 @@ if($usertype == 'student' || $usertype == 'studentadmin'){
   echo("<form method=\"post\" action=\"student_academic_info.php?sessionid=$sessionid\">
         <input type=\"submit\" value=\"Academic Information\">
         </form>");
+
+  echo("<form method=\"post\" action=\"course_enrollment_page_info.php?sessionid=$sessionid\">
+        <input type=\"submit\" value=\"Course Enrollment page\">
+        </form>");
   echo("<br />");
 
   echo("<form method=\"post\" action=\"welcomepage.php?sessionid=$sessionid\">
