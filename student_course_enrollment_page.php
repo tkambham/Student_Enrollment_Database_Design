@@ -14,7 +14,8 @@ $sql = "SELECT section.sectionID,
                 section.enrollmentDeadline,
                 section.capacity ".
         "FROM section " .
-        "JOIN course ON section.coursenumber = course.coursenumber ";
+        "JOIN course ON section.coursenumber = course.coursenumber ". 
+        "ORDER BY section.enrollmentDeadline DESC";
 
 
 $result_array = execute_sql_in_oracle ($sql);
