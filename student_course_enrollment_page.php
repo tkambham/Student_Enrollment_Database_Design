@@ -4,6 +4,7 @@ include "verifysession.php";
 $sessionid =$_GET["sessionid"];
 verify_session($sessionid);
 
+$semester = isset($_GET['semester']) ? $_GET['semester'] : '';
 
 $sql = "SELECT section.sectionID, 
                 course.coursenumber,
@@ -14,8 +15,14 @@ $sql = "SELECT section.sectionID,
                 section.enrollmentDeadline,
                 section.capacity ".
         "FROM section " .
-        "JOIN course ON section.coursenumber = course.coursenumber ". 
-        "ORDER BY section.enrollmentDeadline DESC";
+        "JOIN course ON section.coursenumber = course.coursenumber ";
+
+if($semester != ''){
+    $sql .= " WHERE section.semester = '$semester'";
+}
+else{
+    $sql .= "ORDER BY section.enrollmentDeadline DESC";
+}
 
 
 $result_array = execute_sql_in_oracle ($sql);
@@ -59,6 +66,19 @@ if($values = oci_fetch_array ($cursor2)){
 echo("Hello, $values[1] <br /><br />");
 
 if($usertype == 'student' || $usertype == 'studentadmin'){
+
+    echo "<form method='get'>
+            <input type='hidden' name='sessionid' value='$sessionid'>
+            <label for='semester'>Select a semester:</label>
+            <select id='semester' name='semester'>
+                <option value=''>All</option>
+                <option value='Fall 2024'>Fall 2024</option>
+                <option value='Spring 2025'>Spring 2025</option>
+                <option value='Summer 2025'>Summer 2025</option>
+            </select>
+            <input type='submit' value='Submit'>
+          </form>  
+    ";
 
     echo "<div style='width: 90%; padding: 30px; margin-right: 20px;'>";
         echo "<h2 style='font-family: Arial, sans-serif; color: #333;'>All Courses</h2>";
