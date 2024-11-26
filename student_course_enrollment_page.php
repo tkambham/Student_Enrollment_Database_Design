@@ -5,6 +5,7 @@ $sessionid =$_GET["sessionid"];
 verify_session($sessionid);
 
 $semester = isset($_GET['semester']) ? $_GET['semester'] : '';
+$course_number_input = isset($_GET['course_number']) ? $_GET['course_number'] : '';
 
 $sql = "SELECT section.sectionID, 
                 course.coursenumber,
@@ -19,8 +20,14 @@ $sql = "SELECT section.sectionID,
 
 if($semester != ''){
     $sql .= " WHERE section.semester = '$semester'";
+    if($course_number_input != ''){
+      $sql .= " AND course.coursenumber LIKE '%$course_number_input%'";
+    }
 }
 else{
+    if($course_number_input != ''){
+      $sql .= " WHERE course.coursenumber LIKE '%$course_number_input%'";
+    }
     $sql .= "ORDER BY section.enrollmentDeadline DESC";
 }
 
@@ -76,9 +83,13 @@ if($usertype == 'student' || $usertype == 'studentadmin'){
                 <option value='Spring 2025'>Spring 2025</option>
                 <option value='Summer 2025'>Summer 2025</option>
             </select>
+            <br />
+            <label for='course_number'>Enter the course number:</label>
+            <input type='text' id='course_number' name='course_number'>
+            <br>
             <input type='submit' value='Submit'>
-          </form>  
-    ";
+            </form>  
+            ";
 
     echo "<div style='width: 90%; padding: 30px; margin-right: 20px;'>";
         echo "<h2 style='font-family: Arial, sans-serif; color: #333;'>All Courses</h2>";
