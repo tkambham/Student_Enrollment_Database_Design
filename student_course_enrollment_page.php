@@ -14,7 +14,8 @@ $sql = "SELECT section.sectionID,
                 section.semester,
                 section.schedule,
                 section.enrollmentDeadline,
-                section.capacity ".
+                section.capacity,
+                section.seatsAvailable ".
         "FROM section " .
         "JOIN course ON section.coursenumber = course.coursenumber ";
 
@@ -116,6 +117,8 @@ if($usertype == 'student' || $usertype == 'studentadmin'){
             echo "<td>{$values[5]}</td>";
             echo "<td>{$values[6]}</td>";
             echo "<td>{$values[7]}</td>";
+            echo "<td>{$values[8]}</td>";
+            echo "<td><button><a href='student_course_enrollment_action.php?sessionid=$sessionid&sectionID={$values[0]}'>Enroll</a></button></td>";
             echo "</tr>";
         }
         echo "</table>";
