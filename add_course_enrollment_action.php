@@ -9,9 +9,51 @@ ini_set( "display_errors", 0);
 $username = $_POST["username"];
 $studentID = $_POST["studentid"];
 $sectionID = $_POST["sectionid"];
+$coursenumber = $_POST["coursenumber"];
+$enrollmentDeadline = $_POST["enrolldeadline"];
+$seatsAvailable = $_POST["seatsavailable"];
 
-echo("studentID: $studentID <br />");
-echo("sectionID: $sectionID <br />");
+$timestamp = strtotime($enrollmentDeadline);
+
+$enrollmentDeadline = date("Y-m-d", $timestamp);
+$today = date("Y-m-d");
+
+echo "enrollmentDeadline: $enrollmentDeadline <br />";  
+echo "Todays date: $todayTimestamp <br />";
+
+// Check if the student is already enrolled in the course.
+if($enrollmentDeadline < $today){
+  echo "The enrollment deadline date($enrollmentDeadline) for this course has passed. <br />";
+  echo "You cannot enroll in this course. <br />";
+  echo '<form method="post" action="student_course_enrollment_page.php?sessionid=' . $sessionid . '" style="text-align: center;">
+          <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+        </form>';
+  die();
+}
+else{
+    $sql = "SELECT * FROM enroll WHERE studentID = '$studentID' AND sectionID = '$sectionID'";
+    $result_array = execute_sql_in_oracle ($sql);
+    $result = $result_array["flag"];
+    $cursor = $result_array["cursor"];
+
+    if($values != oci_fetch_array ($cursor)){
+      echo "You are already enrolled in this course. <br />";
+      echo '<form method="post" action="student_course_enrollment_page.php?sessionid=' . $sessionid . '" style="text-align: center;">
+              <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+            </form>';
+      die();
+    }
+    else{
+        if($seatsAvailable == 0){
+          echo "The course is full. <br />";
+          echo "You cannot enroll in this course. <br />";
+          echo '<form method="post" action="student_course_enrollment_page.php?sessionid=' . $sessionid . '" style="text-align: center;">
+                  <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                </form>';
+          die();
+        }
+    }
+}
 
 // Form the sql string and execute it.
 $sql = "INSERT INTO enroll (studentID, sectionID) VALUES ('$studentID', '$sectionID')";
