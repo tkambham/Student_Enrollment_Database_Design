@@ -31,12 +31,17 @@ if($enrollmentDeadline < $today){
   die();
 }
 else{
-    $sql = "SELECT * FROM enroll WHERE studentID = '$studentID' AND sectionID = '$sectionID'";
+    $sql = "SELECT grade FROM enroll ".
+           "JOIN section ON enroll.sectionID = section.sectionID ".
+           "WHERE enroll.studentID = '$studentID' AND section.coursenumber = '$coursenumber'";
     $result_array = execute_sql_in_oracle ($sql);
     $result = $result_array["flag"];
     $cursor = $result_array["cursor"];
 
-    if($values != oci_fetch_array ($cursor)){
+    $values = oci_fetch_array ($cursor);
+    $grade = $values[0];
+
+    if($values != oci_fetch_array ($cursor) || $grade == 'D' || $grade == 'F'){
       echo "You are already enrolled in this course. <br />";
       echo '<form method="post" action="student_course_enrollment_page.php?sessionid=' . $sessionid . '" style="text-align: center;">
               <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
