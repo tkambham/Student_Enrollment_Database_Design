@@ -70,29 +70,90 @@ if($values = oci_fetch_array ($cursor2)){
     $usertype = $values[2];
 }
 
+
+$sql3 = "SELECT enroll.sectionID, course.coursenumber, course.courseTitle, course.creditHours " .
+       "FROM studentview " .
+       "JOIN enroll ON studentview.studentID = enroll.studentID " .
+       "JOIN section ON section.sectionID = enroll.sectionID " .
+       "JOIN course ON section.coursenumber = course.coursenumber " .
+       "WHERE studentview.username = (SELECT username FROM usersession WHERE sessionid = '$sessionid') AND section.semester = 'Spring 2025'";
+
+$result_array3 = execute_sql_in_oracle($sql3);
+$result3 = $result_array3["flag"];
+$cursor3 = $result_array3["cursor"];
+
+if ($result3 == false){
+  display_oracle_error_message($cursor3);
+  die("SQL Execution problem.");
+}
+
+$results_values2 = [];
+while ($values = oci_fetch_array($cursor3)) {
+    $results_values2[] = $values;
+}
+oci_free_statement($cursor3);
+
 // Here we can generate the content of the welcome page
-echo("Hello, $values[1] <br /><br />");
+echo("Hello, $username <br /><br />");
 
 if($usertype == 'student' || $usertype == 'studentadmin'){
 
-    echo "<form method='get'>
-            <input type='hidden' name='sessionid' value='$sessionid'>
-            <label for='semester'>Select a semester:</label>
-            <select id='semester' name='semester'>
-                <option value=''>All</option>
-                <option value='Fall 2024'>Fall 2024</option>
-                <option value='Spring 2025'>Spring 2025</option>
-                <option value='Summer 2025'>Summer 2025</option>
-            </select>
-            <br />
-            <label for='course_number'>Enter the course number:</label>
-            <input type='text' id='course_number' name='course_number'>
-            <br>
-            <input type='submit' value='Submit'>
-            </form>  
-            ";
+  echo "<div style='display: flex; justify-content: space-between; align-items: flex-start;'>";
 
-    echo "<div style='width: 90%; padding: 30px; margin-right: 20px;'>";
+    // Left Div (Form)
+    echo "<div style='width: 45%; padding: 30px; margin-left: 20px;'>";
+      echo "<form method='get'>
+              <input type='hidden' name='sessionid' value='$sessionid'>
+              <label for='semester'>Select a semester:</label>
+              <select id='semester' name='semester'>
+                  <option value=''>All</option>
+                  <option value='Fall 2024'>Fall 2024</option>
+                  <option value='Spring 2025'>Spring 2025</option>
+                  <option value='Summer 2025'>Summer 2025</option>
+              </select>
+              <br />
+              <label for='course_number'>Enter the course number:</label>
+              <input type='text' id='course_number' name='course_number'>
+              <br>
+              <input type='submit' value='Submit'>
+              </form>  
+              ";
+    echo "</div>";
+
+    // Right Div (Course List)
+      echo "<div style='width: 45%; padding: 30px; margin-right: 20px;'>";
+        echo "<h2 style='font-family: Arial, sans-serif; color: #333;'>Summary</h2>";
+        echo "<table border='1' style='border-collapse: collapse; width: 100%;'>";
+        echo "<tr>";
+        echo "<th style = 'padding: 10px'>Section ID</th>";
+        echo "<th style = 'padding: 10px'>Course Number</th>";
+        echo "<th style = 'padding: 10px'>Course Title</th>";
+        echo "<th style = 'padding: 10px'>Credit Hours</th>";
+        echo "</tr>";
+        if (count($results_values2) > 0) {
+          foreach ($results_values2 as $values) {
+              echo "<form method=\"post\" action=\"student_enrollment_drop_action.php?sessionid=$sessionid\">";
+              echo "<input type=\"hidden\" name=\"username\" value=\"{$username}\">";
+              echo "<input type=\"hidden\" name=\"studentid\" value=\"{$studentID}\">";
+              echo "<input type=\"hidden\" name=\"sectionid\" value=\"{$values[0]}\">";
+              echo "<input type=\"hidden\" name=\"coursetitle\" value=\"{$values[2]}\">";
+              echo "<tr>";
+              echo "<td>{$values[0]}</td>";
+              echo "<td>{$values[1]}</td>";
+              echo "<td>{$values[2]}</td>";
+              echo "<td>{$values[3]}</td>";
+              echo "<td><button type=\"submit\">Drop</button></td>";
+              echo "</tr>";
+              echo "</form>";
+          }
+        }
+        echo "</table>";
+      echo "</div>";
+
+  echo "</div>";
+
+
+    echo "<div style='width: 90%; padding: 30px; margin-right: 20px; margin-top:40px;'>";
         echo "<h2 style='font-family: Arial, sans-serif; color: #333;'>All Courses</h2>";
         echo "<table border='1' style='border-collapse: collapse; width: 100%;'>";
         echo "<tr>";
@@ -108,18 +169,26 @@ if($usertype == 'student' || $usertype == 'studentadmin'){
         echo "<th style = 'padding: 10px'>Enroll</th>";
         echo "</tr>";
         foreach ($results_values as $values) {
+            echo "<form method=\"post\" action=\"student_enrollment_add_action.php?sessionid=$sessionid\">";
             echo "<tr>";
+            echo "<input type=\"hidden\" name=\"username\" value=\"{$username}\">";
+            echo "<input type=\"hidden\" name=\"studentid\" value=\"{$studentID}\">";
+            echo "<input type=\"hidden\" name=\"sectionid\" value=\"{$values[0]}\">";
+            echo "<input type=\"hidden\" name=\"coursenumber\" value=\"{$values[1]}\">";
+            echo "<input type=\"hidden\" name=\"enrolldeadline\" value=\"{$values[6]}\">";
+            echo "<input type=\"hidden\" name=\"seatsavailable\" value=\"{$values[8]}\">";
             echo "<td>{$values[0]}</td>";
             echo "<td>{$values[1]}</td>";
-            echo "<td>{$values[2]}</td>";
-            echo "<td>{$values[3]}</td>";
-            echo "<td>{$values[4]}</td>";
-            echo "<td>{$values[5]}</td>";
+            echo "<td name=\"coursetitle\">{$values[2]}</td>";
+            echo "<td name=\"credithours\">{$values[3]}</td>";
+            echo "<td name=\"semester\">{$values[4]}</td>";
+            echo "<td name=\"schedule\">{$values[5]}</td>";
             echo "<td>{$values[6]}</td>";
-            echo "<td>{$values[7]}</td>";
+            echo "<td name=\"capacity\">{$values[7]}</td>";
             echo "<td>{$values[8]}</td>";
-            echo "<td><button><a href='student_course_enrollment_action.php?sessionid=$sessionid&sectionID={$values[0]}'>Enroll</a></button></td>";
+            echo "<td><button type=\"submit\">Enroll</button></td>";
             echo "</tr>";
+            echo "</form>";
         }
         echo "</table>";
     echo "</div>";
