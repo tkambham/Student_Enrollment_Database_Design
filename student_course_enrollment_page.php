@@ -163,18 +163,23 @@ if($usertype == 'student' || $usertype == 'studentadmin'){
         echo "<th style = 'padding: 10px'>Enroll</th>";
         echo "</tr>";
         foreach ($results_values as $values) {
+            echo "<form method=\"post\" action=\"add_course_enrollment_action.php?sessionid=$sessionid\">";
             echo "<tr>";
-            echo "<td>{$values[0]}</td>";
-            echo "<td>{$values[1]}</td>";
-            echo "<td>{$values[2]}</td>";
-            echo "<td>{$values[3]}</td>";
-            echo "<td>{$values[4]}</td>";
-            echo "<td>{$values[5]}</td>";
-            echo "<td>{$values[6]}</td>";
-            echo "<td>{$values[7]}</td>";
-            echo "<td>{$values[8]}</td>";
-            echo "<td><form action=\"course_enrollment_action.php?sessionid=$sessionid\"><button>Enroll</button></form></td>";
+            echo "<input type=\"hidden\" name=\"username\" value=\"{$username}\">";
+            echo "<input type=\"hidden\" name=\"studentid\" value=\"{$studentID}\">";
+            echo "<input type=\"hidden\" name=\"sectionid\" value=\"{$values[0]}\">";
+            echo "<td name=\"sectionid\">{$values[0]}</td>";
+            echo "<td name=\"coursenumber\">{$values[1]}</td>";
+            echo "<td name=\"coursetitle\">{$values[2]}</td>";
+            echo "<td name=\"credithours\">{$values[3]}</td>";
+            echo "<td name=\"semester\">{$values[4]}</td>";
+            echo "<td name=\"schedule\">{$values[5]}</td>";
+            echo "<td name=\"enrolldeadline\">{$values[6]}</td>";
+            echo "<td name=\"capacity\">{$values[7]}</td>";
+            echo "<td name=\"seatsavailable\">{$values[8]}</td>";
+            echo "<td><button type=\"submit\">Enroll</button></td>";
             echo "</tr>";
+            echo "</form>";
         }
         echo "</table>";
     echo "</div>";
