@@ -33,7 +33,7 @@ CREATE TABLE adminuser (
 );
 
 CREATE TABLE studentuser (
-    studentID NUMBER PRIMARY KEY,
+    studentID VARCHAR2(8) PRIMARY KEY,
     age NUMBER(2) NOT NULL,
     address VARCHAR2(50) NOT NULL,
     studenttype VARCHAR2(13) NOT NULL,
@@ -44,13 +44,13 @@ CREATE TABLE studentuser (
 );
 
 CREATE TABLE graduateStudent (
-    studentID NUMBER PRIMARY KEY,
+    studentID VARCHAR2(8) PRIMARY KEY,
     concentration VARCHAR2(20) NOT NULL,
     FOREIGN KEY (studentID) REFERENCES studentuser(studentID) ON DELETE CASCADE
 );
 
 CREATE TABLE underGraduateStudent (
-    studentID NUMBER PRIMARY KEY,
+    studentID VARCHAR2(8) PRIMARY KEY,
     standing VARCHAR2(20) NOT NULL,
     FOREIGN KEY (studentID) REFERENCES studentuser(studentID) ON DELETE CASCADE
 );
@@ -73,7 +73,7 @@ CREATE TABLE section (
 );
 
 CREATE TABLE enroll (
-    studentID NUMBER NOT NULL,
+    studentID VARCHAR2(8) NOT NULL,
     sectionID VARCHAR2(6) NOT NULL,
     grade VARCHAR2(1),
     PRIMARY KEY (studentID, sectionID),
@@ -110,5 +110,29 @@ BEGIN
 END;
 /
 
+CREATE OR REPLACE PROCEDURE create_student_id(
+    lastname IN VARCHAR2,
+    studentID OUT VARCHAR2
+)
+AS
+  v_sequence VARCHAR2(8);
+  v_initials VARCHAR2(2);
+  v_number_part NUMBER;
+BEGIN
+  v_initials := UPPER(SUBSTR(lastname, 1, 2));
+  
+  SELECT MAX(studentID) INTO v_sequence FROM studentuser;
+  
+  IF v_sequence IS NULL THEN
+    v_sequence := '123456';
+    v_number_part := TO_NUMBER(SUBSTR(v_sequence, 3)) + 1;
+  ELSE
+    v_number_part := TO_NUMBER(REGEXP_SUBSTR(v_sequence, '\d+', 1, 1)) + 1;
+  END IF;
+  
+  studentID := v_initials || TO_CHAR(v_number_part);
+  DBMS_OUTPUT.PUT_LINE('Generated studentID: ' || studentID);
+END;
+/
 
 COMMIT;
