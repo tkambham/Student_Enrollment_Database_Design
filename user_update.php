@@ -115,7 +115,7 @@ else if($utype == 'student'){
       </div>
       <div style=\"margin-bottom: 10px;\">
         <label for=\"studentID\" style=\"font-weight: bold;\">StudentID (Read-only):</label>
-        <input type=\"text\" readonly value=\"$studentID\" size=\"20\" maxlength=\"20\" name=\"uname\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
+        <input type=\"text\" readonly value=\"$studentID\" size=\"20\" maxlength=\"20\" name=\"studentID\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
       </div>
       <div style=\"margin-bottom: 10px;\">
         <label for=\"fname\" style=\"font-weight: bold;\">Firstname (Required):</label>
@@ -175,7 +175,7 @@ else if($utype == 'studentadmin'){
       </div>
       <div style=\"margin-bottom: 10px;\">
         <label for=\"studentID\" style=\"font-weight: bold;\">StudentID (Read-only):</label>
-        <input type=\"text\" readonly value=\"$studentID\" size=\"20\" maxlength=\"20\" name=\"uname\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
+        <input type=\"text\" readonly value=\"$studentID\" size=\"20\" maxlength=\"20\" name=\"studentID\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
       </div>
       <div style=\"margin-bottom: 10px;\">
         <label for=\"fname\" style=\"font-weight: bold;\">Firstname (Required):</label>
