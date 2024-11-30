@@ -175,6 +175,7 @@ if($usertype == 'student' || $usertype == 'studentadmin'){
             echo "<input type=\"hidden\" name=\"studentid\" value=\"{$studentID}\">";
             echo "<input type=\"hidden\" name=\"sectionid\" value=\"{$values[0]}\">";
             echo "<input type=\"hidden\" name=\"coursenumber\" value=\"{$values[1]}\">";
+            echo "<input type=\"hidden\" name=\"semester\" value=\"{$values[4]}\">";
             echo "<input type=\"hidden\" name=\"enrolldeadline\" value=\"{$values[6]}\">";
             echo "<input type=\"hidden\" name=\"seatsavailable\" value=\"{$values[8]}\">";
             echo "<td>{$values[0]}</td>";

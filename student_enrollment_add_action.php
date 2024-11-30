@@ -12,14 +12,12 @@ $sectionID = $_POST["sectionid"];
 $coursenumber = $_POST["coursenumber"];
 $enrollmentDeadline = $_POST["enrolldeadline"];
 $seatsAvailable = $_POST["seatsavailable"];
+$semester = $_POST["semester"];
 
 $timestamp = strtotime($enrollmentDeadline);
 
 $enrollmentDeadline = date("Y-m-d", $timestamp);
 $today = date("Y-m-d");
-
-echo "enrollmentDeadline: $enrollmentDeadline <br />";  
-echo "Todays date: $todayTimestamp <br />";
 
 // Check if the student is already enrolled in the course.
 if($enrollmentDeadline < $today){
