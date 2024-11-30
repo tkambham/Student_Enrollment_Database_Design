@@ -51,47 +51,72 @@
         die("SQL Execution problem.");
     }
 
-    echo("Hello, $username, $usertype <br /><br />");
-    echo "<div style='text-align: left; padding: 30px; margin-left: 20px;'>";
-    echo "<h2 style='font-family: Arial, sans-serif; color: #333;'>Personal Information</h2>";
+    echo "<div style='display: flex; justify-content: space-between; padding: 30px;'>";
+        echo "<div style='flex: 1; padding-right: 20px;'>";
+            echo "<h2 style='font-family: Arial, sans-serif; color: #333;'>Student Information</h2>";
+            echo "<div style='font-family: Arial, sans-serif; color: #555; margin-bottom: 10px;'>";
+                echo "<div style='margin-bottom: 10px;'><strong>Student ID       :</strong> $studentID</div>";
+                echo "<div style='margin-bottom: 10px;'><strong>Name             :</strong> $name</div>";
+                echo "<div style='margin-bottom: 10px;'><strong>Student Type     :</strong> $studenttype</div>";
+                echo "<div style='margin-bottom: 10px;'><strong>Probation Status :</strong> $status</div>";
+                echo "<div style='margin-bottom: 10px;'><strong>Username         :</strong> $username</div>";
+            echo "</div>"; 
 
-    echo "<div style='font-family: Arial, sans-serif; color: #555; margin-bottom: 10px;'>";
-    echo "<div style='margin-bottom: 10px;'><strong>Student ID       :</strong> $studentID</div>";
-    echo "<div style='margin-bottom: 10px;'><strong>Name             :</strong> $name</div>";
-    echo "<div style='margin-bottom: 10px;'><strong>Age              :</strong> $age</div>";
-    echo "<div style='margin-bottom: 10px;'><strong>Address          :</strong> $address</div>";
-    echo "<div style='margin-bottom: 10px;'><strong>Student Type     :</strong> $studenttype</div>";
-    echo "<div style='margin-bottom: 10px;'><strong>Probation Status :</strong> $status</div>";
-    echo "<div style='margin-bottom: 10px;'><strong>Username         :</strong> $username</div>";
+            echo "<h2 style='font-family: Arial, sans-serif; color: #333; margin-top: 30px;'>Grading</h2>";
+            echo "<div style='font-family: Arial, sans-serif; color: #555; margin-bottom: 10px;'>";
+                echo "<div style='margin-bottom: 10px;'><strong>A       :</strong> 4.0</div>";
+                echo "<div style='margin-bottom: 10px;'><strong>B       :</strong> 3.0</div>";
+                echo "<div style='margin-bottom: 10px;'><strong>C       :</strong> 2.0</div>";
+                echo "<div style='margin-bottom: 10px;'><strong>D       :</strong> 1.0</div>";
+                echo "<div style='margin-bottom: 10px;'><strong>F       :</strong> 0.0</div>";
+            echo "</div>";
+        echo "</div>"; 
+        
+        echo "<div style='flex: 1; padding-left: 20px;'>";
+        echo "<h2 style='font-family: Arial, sans-serif; color: #333;'>Grades</h2>";
+
+        echo "<table style='font-family: Arial, sans-serif; color: #555; width: 100%; margin-bottom: 10px;'>";
+        echo "<tr>";
+        echo "<th style='padding: 10px; border-bottom: 1px solid #ddd;'>Section ID</th>";
+        echo "<th style='padding: 10px; border-bottom: 1px solid #ddd;'>Semester</th>";
+        echo "<th style='padding: 10px; border-bottom: 1px solid #ddd;'>Course ID</th>";
+        echo "<th style='padding: 10px; border-bottom: 1px solid #ddd;'>Course Title</th>";
+        echo "<th style='padding: 10px; border-bottom: 1px solid #ddd;'>Grade</th>";
+        echo "<th style='padding: 10px; border-bottom: 1px solid #ddd;'>Update</th>";
+        echo "</tr>";
+
+        while($values = oci_fetch_array($cursor2)){
+            $sectionID = $values[0];
+            $courseID = $values[1];
+            $title = $values[2];
+            $grade = $values[3];
+            $semester = $values[4];
+
+            echo "<form method=\"post\" action=\"student_grade_change_action.php?sessionid=$sessionid\">";
+            echo "<input type=\"hidden\" name=\"username\" value=\"{$username}\">";
+            echo "<input type=\"hidden\" name=\"studentID\" value=\"{$studentID}\">";
+            echo "<input type=\"hidden\" name=\"sectionID\" value=\"{$sectionID}\">";
+            echo "<input type=\"hidden\" name=\"semester\" value=\"{$semester}\">";
+            echo "<input type=\"hidden\" name=\"courseID\" value=\"{$courseID}\">";
+            echo "<input type=\"hidden\" name=\"grade\" value=\"{$grade}\">";
+            echo "<tr>";
+            echo "<td style='padding: 10px; border-bottom: 1px solid #ddd;'>$sectionID</td>";
+            echo "<td style='padding: 10px; border-bottom: 1px solid #ddd;'>$semester</td>";
+            echo "<td style='padding: 10px; border-bottom: 1px solid #ddd;'>$courseID</td>";
+            echo "<td style='padding: 10px; border-bottom: 1px solid #ddd;'>$title</td>";
+            echo "<td style='padding: 10px; border-bottom: 1px solid #ddd;'><input type=\"text\" name=\"grade\" value=\"{$grade}\" size=\"3\" maxlength=\"1\"></td>";
+            echo '<td style="padding: 10px; border-bottom: 1px solid #ddd;"><input type="submit" value="Update" style="background-color: #FADA5E; color: black; padding: 10px 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;"></td>';
+            echo "</tr>";
+            echo "</form>";
+        }
+        echo "</table>";
+        echo "</div>"; 
 
     echo "</div>"; 
+    echo('<form method="post" action="admin.php?sessionid=' . $sessionid . '" style="text-align: center; margin-top: 20px;">
+        <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+        </form>');
+    echo("<br />");
 
-    echo "<h2 style='font-family: Arial, sans-serif; color: #333;'>Grades</h2>";
-
-    echo "<table style='font-family: Arial, sans-serif; color: #555; margin-bottom: 10px;'>";
-    echo "<tr>";
-    echo "<th style='padding: 10px; border-bottom: 1px solid #ddd;'>Section ID</th>";
-    echo "<th style='padding: 10px; border-bottom: 1px solid #ddd;'>Semester</th>";
-    echo "<th style='padding: 10px; border-bottom: 1px solid #ddd;'>Course ID</th>";
-    echo "<th style='padding: 10px; border-bottom: 1px solid #ddd;'>Course Title</th>";
-    echo "<th style='padding: 10px; border-bottom: 1px solid #ddd;'>Grade</th>";
-    echo "<th style='padding: 10px; border-bottom: 1px solid #ddd;'>Update</th>";
-    echo "</tr>";
-
-    while($values = oci_fetch_array ($cursor2)){
-        $sectionID = $values[0];
-        $courseID = $values[1];
-        $title = $values[2];
-        $grade = $values[3];
-        $semester = $values[4];
-
-        echo "<tr>";
-        echo "<td style='padding: 10px; border-bottom: 1px solid #ddd;'>$sectionID</td>";
-        echo "<td style='padding: 10px; border-bottom: 1px solid #ddd;'>$semester</td>";
-        echo "<td style='padding: 10px; border-bottom: 1px solid #ddd;'>$courseID</td>";
-        echo "<td style='padding: 10px; border-bottom: 1px solid #ddd;'>$title</td>";
-        echo "<td style='padding: 10px; border-bottom: 1px solid #ddd;'>$grade</td>";
-        echo "</tr>";
-    }
 
 ?>
