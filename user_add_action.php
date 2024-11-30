@@ -15,10 +15,15 @@
 
     $firstname = $_POST["fname"];
     $lastname = $_POST["lname"];
+    $age = $_POST["age"];
+    $address = $_POST["address"];
     $usertype = $_POST["utype"];
+    $studenttype = $_POST["stype"];
     $password = $_POST["password"];
+    $studentID = "";
+    $status = "N";
 
-    if($usertype == "" || $lastname == "NULL" || $firstname == NULL || $password == NULL){
+    if($usertype == "" || $lastname == "" || $firstname == "" || $password == ""){
         $usertype = "NULL";
         $lastname = "NULL";
         $firstname = "NULL";
@@ -37,7 +42,19 @@
         $admissiondate = $_POST["adate"];
         if($admissiondate == ""){
             $admissiondate = "NULL";
-            die("Start Date is required.");
+            die("Admission Date is required.");
+        }
+        if($studenttype == ""){
+            $studenttype = "NULL";
+            die("Student Type is required.");
+        }
+        if($age == ""){
+            $age = "NULL";
+            die("Age is required.");
+        }
+        if($address == ""){
+            $address = "NULL";
+            die("Address is required.");
         }
     }
     else if($usertype == "studentadmin"){
@@ -49,9 +66,41 @@
         $admissiondate = $_POST["adate"];
         if($admissiondate == ""){
             $admissiondate = "NULL";
-            die("Start Date is required.");
+            die("Admission Date is required.");
+        }
+        if($studenttype == ""){
+            $studenttype = "NULL";
+            die("Student Type is required.");
+        }
+        if($age == ""){
+            $age = "NULL";
+            die("Age is required.");
+        }
+        if($address == ""){
+            $address = "NULL";
+            die("Address is required.");
         }
     }
+
+    $sqlP = "BEGIN create_student_id(:lastname, :studentID); END;";
+
+    $stid = oci_parse($connection, $sqlP);
+
+    oci_bind_by_name($stid, ":lastname", $lastname);
+    oci_bind_by_name($stid, ":studentID", $studentID, 8); 
+
+    $result = oci_execute($stid);
+
+    if (!$result) {
+        echo "<B>Couldn't create student ID.</B><BR />";
+        display_oracle_error_message($stid);
+        die("Error during stored procedure execution.");
+    }
+
+    oci_free_statement($stid);
+
+    echo "Generated Student ID: $studentID";
+
 
     if($usertype == "admin"){
         $sql = "INSERT INTO usertable (usertype, password, username, firstname, lastname) VALUES ('$usertype', '$password', '$username', '$firstname', '$lastname')";
@@ -59,11 +108,11 @@
     }
     else if($usertype == "student"){
         $sql = "INSERT INTO usertable (usertype, password, username, firstname, lastname) VALUES ('$usertype', '$password', '$username', '$firstname', '$lastname')";
-        $sql2 = "INSERT INTO studentuser (username, admissiondate) VALUES ('$username', to_date('$admissiondate', 'mm/dd/yyyy'))";
+        $sql2 = "INSERT INTO studentuser (studentID, age, address, studenttype, status, username, admissiondate) VALUES ( '$studentID', '$age', '$address', '$studenttype', '$status','$username', to_date('$admissiondate', 'mm/dd/yyyy'))";
     }
     else if($usertype == "studentadmin"){
         $sql = "INSERT INTO usertable (usertype, password, username, firstname, lastname) VALUES ('$usertype', '$password', '$username', '$firstname', '$lastname')";
-        $sql2 = "INSERT INTO studentuser (username, admissiondate) VALUES ('$username', to_date('$admissiondate', 'mm/dd/yyyy'))";
+        $sql2 = "INSERT INTO studentuser (studentID, age, address, studenttype, status, username, admissiondate) VALUES ( '$studentID', '$age', '$address', '$studenttype', '$status','$username', to_date('$admissiondate', 'mm/dd/yyyy'))";
         $sql3 = "INSERT INTO adminuser (username, startdate) VALUES ('$username', to_date('$startdate', 'mm/dd/yyyy'))";
     }
 
@@ -103,6 +152,10 @@
             </i>
         ");
     }
+
+    oci_free_statement($cursor);
+    oci_free_statement($cursor2);
+    oci_free_statement($cursor3);
       
     Header("Location:admin.php?sessionid=$sessionid");
 

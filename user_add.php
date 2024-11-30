@@ -36,16 +36,16 @@
             <div style=\"margin-bottom: 10px;\">
                 <label for=\"utype\" style=\"font-weight: bold;\">UserType (Required):</label>
                 <select name=\"utype\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
-                    <option value=\"$utype\">student</option>
-                    <option value=\"$utype\">admin</option>
-                    <option value=\"$utype\">studentadmin</option>
+                    <option value='student'>student</option>
+                    <option value='student'>admin</option>
+                    <option value='studentadmin'>studentadmin</option>
                 </select>
             </div>
             <div style=\"margin-bottom: 10px;\">
                 <label for=\"stype\" style=\"font-weight: bold;\">StudentType (If student or studentadmin):</label>
                 <select name=\"stype\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
-                    <option value=\"$stype\">Undergraduate</option>
-                    <option value=\"$stype\">Graduate</option>
+                    <option value='Undergraduate'>Undergraduate</option>
+                    <option value='Graduate'>Graduate</option>
                 </select>
             </div>
             <div style=\"margin-bottom: 10px;\">

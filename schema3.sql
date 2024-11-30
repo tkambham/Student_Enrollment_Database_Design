@@ -6,17 +6,17 @@ INSERT INTO usertable VALUES ('mlabuschagne', '5678', 'Marnus', 'Labuschagne', '
 
 
 INSERT INTO adminuser VALUES ('jdeep', to_date('07/25/2023', 'mm/dd/yyyy'));
-INSERT INTO studentuser VALUES ('12345678','22','20 S Bryant Ave, Edmond, OK 73034','Undergraduate','N','llivingstone', to_date('08/15/2023', 'mm/dd/yyyy'));
-INSERT INTO studentuser VALUES ('12345679','25','320 E Edwards, Edmond, OK 73034','Graduate','N','ssmith', to_date('01/15/2024', 'mm/dd/yyyy'));
+INSERT INTO studentuser VALUES ('LI123456','22','20 S Bryant Ave, Edmond, OK 73034','Undergraduate','N','llivingstone', to_date('08/15/2023', 'mm/dd/yyyy'));
+INSERT INTO studentuser VALUES ('SM123457','25','320 E Edwards, Edmond, OK 73034','Graduate','N','ssmith', to_date('01/15/2024', 'mm/dd/yyyy'));
 INSERT INTO adminuser VALUES ('ssmith', to_date('08/11/2024', 'mm/dd/yyyy'));
-INSERT INTO studentuser VALUES ('12345680','23','100 W Campbell St, Edmond, OK 73034','Undergraduate','N','dwarner', to_date('08/15/2023', 'mm/dd/yyyy'));
-INSERT INTO studentuser VALUES ('12345681','24','200 N Fretz Ave, Edmond, OK 73034','Graduate','N','mlabuschagne', to_date('01/15/2024', 'mm/dd/yyyy'));
+INSERT INTO studentuser VALUES ('WA123458','23','100 W Campbell St, Edmond, OK 73034','Undergraduate','N','dwarner', to_date('08/15/2023', 'mm/dd/yyyy'));
+INSERT INTO studentuser VALUES ('LA123459','24','200 N Fretz Ave, Edmond, OK 73034','Graduate','N','mlabuschagne', to_date('01/15/2024', 'mm/dd/yyyy'));
 
 
-INSERT INTO underGraduateStudent VALUES ('12345678','Junior');
-INSERT INTO graduateStudent VALUES ('12345679','Intelligent Systems');
-INSERT INTO underGraduateStudent VALUES ('12345680','Senior');
-INSERT INTO graduateStudent VALUES ('12345681','Full Stack');
+INSERT INTO underGraduateStudent VALUES ('LI123456','Junior');
+INSERT INTO graduateStudent VALUES ('SM123457','Intelligent Systems');
+INSERT INTO underGraduateStudent VALUES ('WA123458','Senior');
+INSERT INTO graduateStudent VALUES ('LA123459','Full Stack');
 
 
 INSERT INTO course VALUES ('1001', 'Algo Design and Implementation', '3');
@@ -94,32 +94,32 @@ INSERT INTO section (sectionID, coursenumber, schedule, semester, enrollmentDead
 INSERT INTO section (sectionID, coursenumber, schedule, semester, enrollmentDeadline, capacity) VALUES ('25S310', '1501', 'TF 11:00-12:30', 'Summer 2025', to_date('06/01/2025', 'mm/dd/yyyy'), 20);
 
 
-INSERT INTO enroll VALUES (12345678, '23S101', 'A');  
-INSERT INTO enroll VALUES (12345678, '23S107', 'B'); 
-INSERT INTO enroll VALUES (12345678, '23S112', 'A'); 
-INSERT INTO enroll VALUES (12345678, '24S204', 'A'); 
-INSERT INTO enroll VALUES (12345678, '24S210', 'C'); 
-INSERT INTO enroll VALUES (12345678, '24S211', 'B'); 
-INSERT INTO enroll VALUES (12345678, '24S102', ''); 
-INSERT INTO enroll VALUES (12345678, '24S106', ''); 
-INSERT INTO enroll VALUES (12345678, '24S115', ''); 
+INSERT INTO enroll VALUES ('LI123456', '23S101', 'A');  
+INSERT INTO enroll VALUES ('LI123456', '23S107', 'B'); 
+INSERT INTO enroll VALUES ('LI123456', '23S112', 'A'); 
+INSERT INTO enroll VALUES ('LI123456', '24S204', 'A'); 
+INSERT INTO enroll VALUES ('LI123456', '24S210', 'C'); 
+INSERT INTO enroll VALUES ('LI123456', '24S211', 'B'); 
+INSERT INTO enroll VALUES ('LI123456', '24S102', ''); 
+INSERT INTO enroll VALUES ('LI123456', '24S106', ''); 
+INSERT INTO enroll VALUES ('LI123456', '24S115', ''); 
 
-INSERT INTO enroll VALUES (12345679, '24S210', 'A');  
-INSERT INTO enroll VALUES (12345679, '24S203', 'B');  
-INSERT INTO enroll VALUES (12345679, '24S202', 'B');  
-INSERT INTO enroll VALUES (12345679, '24S102', '');  
-INSERT INTO enroll VALUES (12345679, '24S107', '');  
-INSERT INTO enroll VALUES (12345679, '24S104', '');  
+INSERT INTO enroll VALUES ('SM123457', '24S210', 'A');  
+INSERT INTO enroll VALUES ('SM123457', '24S203', 'B');  
+INSERT INTO enroll VALUES ('SM123457', '24S202', 'B');  
+INSERT INTO enroll VALUES ('SM123457', '24S102', '');  
+INSERT INTO enroll VALUES ('SM123457', '24S107', '');  
+INSERT INTO enroll VALUES ('SM123457', '24S104', '');  
 
-INSERT INTO enroll VALUES (12345680, '24S103', '');  
-INSERT INTO enroll VALUES (12345680, '24S102', '');  
-INSERT INTO enroll VALUES (12345680, '24S104', '');  
+INSERT INTO enroll VALUES ('WA123458', '24S103', '');  
+INSERT INTO enroll VALUES ('WA123458', '24S102', '');  
+INSERT INTO enroll VALUES ('WA123458', '24S104', '');  
 
-INSERT INTO enroll VALUES (12345681, '24S202', 'A');  
-INSERT INTO enroll VALUES (12345681, '24S203', 'B');  
-INSERT INTO enroll VALUES (12345681, '24S204', 'B');  
-INSERT INTO enroll VALUES (12345681, '24S102', '');  
-INSERT INTO enroll VALUES (12345681, '24S105', '');  
-INSERT INTO enroll VALUES (12345681, '24S104', '');  
+INSERT INTO enroll VALUES ('LA123459', '24S202', 'A');  
+INSERT INTO enroll VALUES ('LA123459', '24S203', 'B');  
+INSERT INTO enroll VALUES ('LA123459', '24S204', 'B');  
+INSERT INTO enroll VALUES ('LA123459', '24S102', '');  
+INSERT INTO enroll VALUES ('LA123459', '24S105', '');  
+INSERT INTO enroll VALUES ('LA123459', '24S104', '');  
 
 commit;
