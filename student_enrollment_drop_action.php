@@ -11,8 +11,13 @@ $studentId = $_POST["studentid"];
 $sectionId = $_POST["sectionid"];
 $coursetitle = $_POST["coursetitle"];
 
+echo ("username: $username <br />");
+echo ("studentId: $studentId <br />");
+echo ("sectionId: $sectionId <br />");
+echo ("coursetitle: $coursetitle <br />");
+
 // Form the sql string and execute it.
-$sql = "DELETE FROM enroll WHERE studentID = '$username' AND sectionID = '$sectionId'";
+$sql = "DELETE FROM enroll WHERE studentID = '$studentId' AND sectionID = '$sectionId'";
 //echo($sql);
 
 $result_array = execute_sql_in_oracle ($sql);

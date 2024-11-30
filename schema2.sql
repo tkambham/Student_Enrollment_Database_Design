@@ -99,13 +99,21 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER insert_seats_available
-BEFORE INSERT OR DELETE ON enroll
+BEFORE INSERT ON enroll
 FOR EACH ROW
 BEGIN
     IF INSERTING THEN
         UPDATE section SET seatsAvailable = seatsAvailable - 1 WHERE sectionID = :new.sectionID;
-    ELSIF DELETING THEN
-        UPDATE section SET seatsAvailable = seatsAvailable + 1 WHERE sectionID = :new.sectionID;
+    END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER delete_seats_available
+AFTER DELETE ON enroll
+FOR EACH ROW
+BEGIN
+    IF DELETING THEN
+        UPDATE section SET seatsAvailable = seatsAvailable + 1 WHERE sectionID = :old.sectionID;
     END IF;
 END;
 /
