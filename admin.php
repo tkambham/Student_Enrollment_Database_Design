@@ -40,10 +40,29 @@ if($usertype == 'admin' || $usertype == 'studentadmin'){
     echo("
         <form method=\"post\" action=\"admin.php?sessionid=$sessionid\">
         UserName: <input type=\"text\" size=\"20\" maxlength=\"12\" name=\"q_username\"> 
-        UserType: <input type=\"text\" size=\"12\" maxlength=\"12\" name=\"q_usertype\"> 
+        UserType: <select name=\"q_usertype\" size=\"1\">
+            <option value=\"\">All</option>
+            <option value=\"student\">Student</option>
+            <option value=\"admin\">Admin</option>
+            <option value=\"studentadmin\">Studentadmin</option>
+        </select>
+        <!-- <input type=\"text\" size=\"12\" maxlength=\"12\" name=\"q_usertype\"> -->
+        Name: <input type=\"text\" size=\"20\" maxlength=\"20\" name=\"q_name\">
+        Student ID: <input type=\"text\" size=\"8\" maxlength=\"8\" name=\"q_id\">
+        Course Number: <input type=\"text\" size=\"4\" maxlength=\"4\" name=\"q_cnum\">
+        Student Type: <select name=\"q_stype\" size=\"1\">
+            <option value=\"\">All</option>
+            <option value=\"Undergraduate\">Undergraduate</option>
+            <option value=\"Graduate\">Graduate</option>
+        </select>
+        <!-- <input type=\"text\" size=\"13\" maxlength=\"13\" name=\"q_stype\"> -->
+        Probation Status: <select name=\"q_pstatus\" size=\"1\">
+            <option value=\"\">All</option>
+            <option value=\"N\">Active</option>
+            <option value=\"P\">Probation</option>
+        </select>
         <input type=\"submit\" value=\"Search\">
         </form>
-
         <form method=\"post\" action=\"welcomepage.php?sessionid=$sessionid\">
         <input type=\"submit\" value=\"Go Back\">
         </form>
@@ -56,16 +75,42 @@ if($usertype == 'admin' || $usertype == 'studentadmin'){
     // Interpret the query requirements
     $q_username = $_POST["q_username"];
     $q_usertype = $_POST["q_usertype"];
+    $q_name = $_POST["q_name"];
+    $q_id = $_POST["q_id"];
+    $q_cnum = $_POST["q_cnum"];
+    $q_stype = $_POST["q_stype"];
+    $q_pstatus = $_POST["q_pstatus"];
 
     $whereClause = " 1=1 ";
 
     if (isset($q_username) and trim($q_username)!= "") { 
-    $whereClause .= " and usertable.username like '%$q_username%'"; 
+        $whereClause .= " and usertable.username like '%$q_username%'"; 
     }
 
     if (isset($q_usertype) and $q_usertype!= "") { 
-    $whereClause .= " and usertable.usertype like '%$q_usertype%'"; 
+        $whereClause .= " and usertable.usertype like '%$q_usertype%'"; 
     }
+
+    if (isset($q_name) and trim($q_name)!= "") {
+        $whereClause .= " and (usertable.firstname like '%$q_name%' or usertable.lastname like '%$q_name%')"; 
+    }
+
+    if (isset($q_id) and trim($q_id)!= "") {
+        $whereClause .= " and studentuser.studentID like '%$q_id%'"; 
+    }
+
+    if (isset($q_cnum) and trim($q_cnum)!= "") {
+        $whereClause .= " and studentuser.coursenumber like '%$q_cnum%'"; 
+    }
+
+    if (isset($q_stype) and $q_stype!= "") {
+        $whereClause .= " and studentuser.studenttype like '%$q_stype%'"; 
+    }
+
+    if (isset($q_pstatus) and $q_pstatus!= "") {
+        $whereClause .= " and studentuser.status like '%$q_pstatus%'"; 
+    }
+
 
     echo("User  Name     : $username <br />");
     echo("User  Type     : $usertype <br />");
