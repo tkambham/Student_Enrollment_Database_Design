@@ -63,6 +63,21 @@
     echo "<a href='student_grade_change.php?sessionid=$sessionid&username=$username' style='text-align: center; margin-top: 20px; background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; text-decoration: none;'>Go Back</a>";
 
     oci_free_statement($cursor);
+    $sql2 =  "BEGIN 
+        get_probation_status('$studentID'); 
+        END;";
+
+    $result_array = execute_sql_in_oracle ($sql2);
+
+    $result = $result_array["flag"];
+    $cursor = $result_array["cursor"];
+
+    if ($result == false){
+        display_oracle_error_message($cursor);
+        echo "<B>Update Failed.</B> <BR />";
+        display_oracle_error_message($cursor);
+        die("SQL Execution problem.");
+    }
 
     
 ?>

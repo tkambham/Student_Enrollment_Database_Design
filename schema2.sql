@@ -143,4 +143,65 @@ BEGIN
 END;
 /
 
+-- CREATE OR REPLACE TRIGGER generate_student_id
+-- BEFORE INSERT ON studentuser
+-- FOR EACH ROW
+-- BEGIN
+--     create_student_id(:new.lastname, :new.studentID);
+-- END;
+-- /
+
+CREATE OR REPLACE PROCEDURE get_probation_status(
+    p_studentID IN VARCHAR2
+)
+IS
+    gps_gpa NUMBER(3,2);
+    gps_course_count NUMBER(3);
+BEGIN
+    SELECT ROUND(SUM(
+            CASE 
+                WHEN e.grade = 'A' THEN 4 * c.creditHours
+                WHEN e.grade = 'B' THEN 3 * c.creditHours
+                WHEN e.grade = 'C' THEN 2 * c.creditHours
+                WHEN e.grade = 'D' THEN 1 * c.creditHours
+                WHEN e.grade = 'F' THEN 0 * c.creditHours
+                ELSE 0
+            END
+        ) / 
+        NULLIF(SUM(
+            CASE 
+                WHEN e.grade IN ('A', 'B', 'C', 'D', 'F') THEN c.creditHours
+                ELSE 0
+            END
+        ), 0), 2) INTO gps_gpa
+    FROM studentview sv
+    LEFT JOIN enroll e ON sv.studentID = e.studentID
+    LEFT JOIN section s ON e.sectionID = s.sectionID
+    LEFT JOIN course c ON s.coursenumber = c.coursenumber
+    WHERE sv.studentID = p_studentID;
+
+
+    SELECT COUNT(DISTINCT c.coursenumber) INTO gps_course_count
+    FROM studentview sv
+    LEFT JOIN enroll e ON sv.studentID = e.studentID
+    LEFT JOIN section s ON e.sectionID = s.sectionID
+    LEFT JOIN course c ON s.coursenumber = c.coursenumber
+    WHERE sv.studentID = p_studentID
+    AND e.grade IS NOT NULL;
+
+    IF gps_gpa = 0.0 AND gps_course_count = 0 THEN
+        UPDATE studentuser su SET su.status = 'N' WHERE su.studentID = p_studentID;
+    ELSIF gps_gpa = 2.0 AND gps_course_count != 0 THEN
+        UPDATE studentuser su SET su.status = 'P' WHERE su.studentID = p_studentID;
+    ELSIF gps_gpa < 2.0 THEN
+        UPDATE studentuser su SET su.status = 'P' WHERE su.studentID = p_studentID;
+    ELSE
+        UPDATE studentuser su SET su.status = 'N' WHERE su.studentID = p_studentID;
+    END IF;
+END get_probation_status;
+/
+SHOW ERRORS;
+
+
+
 COMMIT;
