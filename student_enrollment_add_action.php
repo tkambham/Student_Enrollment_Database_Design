@@ -55,6 +55,47 @@ else{
                 </form>';
           die();
         }
+        else{
+          $sqlP = "SELECT prerequisitecoursenumber FROM prerequisiteCourse WHERE coursenumber = '$coursenumber'";
+          $result_arrayP = execute_sql_in_oracle($sqlP);
+          $resultP = $result_arrayP["flag"];
+          $cursorP = $result_arrayP["cursor"];
+
+          $prerequisiteCourses = [];
+          while ($valuesP = oci_fetch_array($cursorP)) {
+              $prerequisiteCourses[] = $valuesP['prerequisitecoursenumber'];
+          }
+
+          $sqlC = "SELECT section.coursenumber FROM enroll ".
+              "JOIN section ON enroll.sectionID = section.sectionID ".
+              "WHERE enroll.studentID = '$studentID' AND enroll.grade != 'F' AND enroll.grade != ''";
+          $result_arrayC = execute_sql_in_oracle($sqlC);
+          $resultC = $result_arrayC["flag"];
+          $cursorC = $result_arrayC["cursor"];
+
+
+          $completedCourses = [];
+          while ($valuesC = oci_fetch_array($cursorC)) {
+              $completedCourses[] = $valuesC['coursenumber'];
+          }
+
+          $k = 0;
+          foreach ($prerequisiteCourses as $prerequisiteCourse) {
+              if (in_array($prerequisiteCourse, $completedCourses)) {
+                  $k++; 
+              }
+          }
+
+          if($k != count($prerequisiteCourses)){
+            echo "You have not completed the prerequisite course for this course. <br />";
+            echo "</ul>";
+            echo "You cannot enroll in this course. <br />";
+            echo '<form method="post" action="student_course_enrollment_page.php?sessionid=' . $sessionid . '" style="text-align: center;">
+                    <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                  </form>';
+            die();
+          }
+        }
     }
 }
 
