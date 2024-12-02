@@ -36,6 +36,15 @@ INSERT INTO course VALUES ('1602', 'Algos of Machine Learning', '3');
 INSERT INTO course VALUES ('1603', 'Computer Application in Statistics', '3');
 INSERT INTO course VALUES ('1604', 'Introduction to Robotics', '3');
 
+INSERT INTO prerequisiteCourse VALUES ('1602', '1603');
+INSERT INTO prerequisiteCourse VALUES ('1604', '1603');
+INSERT INTO prerequisiteCourse VALUES ('1604', '1602');
+INSERT INTO prerequisiteCourse VALUES ('1604', '1601');
+INSERT INTO prerequisiteCourse VALUES ('1302', '1301');
+INSERT INTO prerequisiteCourse VALUES ('1502', '1501');
+INSERT INTO prerequisiteCourse VALUES ('1503', '1501');
+INSERT INTO prerequisiteCourse VALUES ('1202', '1201');
+
 INSERT INTO section (sectionID, coursenumber, schedule, semester, enrollmentDeadline, capacity) VALUES ('23S101', '1001', 'MWF 10:00-11:00', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), 40);
 INSERT INTO section (sectionID, coursenumber, schedule, semester, enrollmentDeadline, capacity) VALUES ('23S102', '1002', 'MWF 08:00-09:00', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), 40);
 INSERT INTO section (sectionID, coursenumber, schedule, semester, enrollmentDeadline, capacity) VALUES ('23S103', '1101', 'MWF 13:00-14:00', 'Fall 2023', to_date('08/15/2023', 'mm/dd/yyyy'), 40);

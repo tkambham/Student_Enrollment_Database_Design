@@ -20,7 +20,7 @@
     $usertype = $_POST["utype"];
     $studenttype = $_POST["stype"];
     $password = $_POST["password"];
-    $studentID = "";
+    $studentID = '';
     $status = "N";
 
     if($usertype == "" || $lastname == "" || $firstname == "" || $password == ""){
@@ -82,25 +82,27 @@
         }
     }
 
-    $sqlP = "BEGIN create_student_id(:lastname, :studentID); END;";
+    $sqlP = "
+            BEGIN 
+                create_student_id(:lastname, :studentID);
+            END;";
 
-    $stid = oci_parse($connection, $sqlP);
+    $stmtP = execute_sql_in_oracle($sqlP);
 
-    oci_bind_by_name($stid, ":lastname", $lastname);
-    oci_bind_by_name($stid, ":studentID", $studentID, 8); 
+    oci_bind_by_name($stmtP, ' :lastname', $lname, 20);
+    oci_bind_by_name($stmtP, ' :studentID', $studentID, 8);
 
-    $result = oci_execute($stid);
+    $lname = $lastname;
+    $studentID = 0;
 
-    if (!$result) {
-        echo "<B>Couldn't create student ID.</B><BR />";
-        display_oracle_error_message($stid);
-        die("Error during stored procedure execution.");
+    echo $studentID;
+
+    $resultP = oci_execute($stmtP);
+
+    if($resultP == false){
+        display_oracle_error_message($stmtP);
+        die("SQL Execution problem.");
     }
-
-    oci_free_statement($stid);
-
-    echo "Generated Student ID: $studentID";
-
 
     if($usertype == "admin"){
         $sql = "INSERT INTO usertable (usertype, password, username, firstname, lastname) VALUES ('$usertype', '$password', '$username', '$firstname', '$lastname')";

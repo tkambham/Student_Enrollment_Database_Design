@@ -123,25 +123,22 @@ CREATE OR REPLACE PROCEDURE create_student_id(
     studentID OUT VARCHAR2
 )
 AS
-  v_sequence VARCHAR2(8);
-  v_initials VARCHAR2(2);
-  v_number_part NUMBER;
+    v_initials VARCHAR2(2);
+    v_number_part NUMBER;
+    v_count NUMBER;
 BEGIN
-  v_initials := UPPER(SUBSTR(lastname, 1, 2));
-  
-  SELECT MAX(studentID) INTO v_sequence FROM studentuser;
-  
-  IF v_sequence IS NULL THEN
-    v_sequence := '123456';
-    v_number_part := TO_NUMBER(SUBSTR(v_sequence, 3)) + 1;
-  ELSE
-    v_number_part := TO_NUMBER(REGEXP_SUBSTR(v_sequence, '\d+', 1, 1)) + 1;
-  END IF;
-  
-  studentID := v_initials || TO_CHAR(v_number_part);
+    v_initials := UPPER(SUBSTR(lastname, 1, 2));
+
+    SELECT COUNT(studentID) INTO v_count FROM studentuser;
+
+    v_number_part := v_count + 123456;
+
+    studentID := v_initials || TO_CHAR(v_number_part);
+
   DBMS_OUTPUT.PUT_LINE('Generated studentID: ' || studentID);
 END;
 /
+SHOW ERRORS;
 
 -- CREATE OR REPLACE TRIGGER generate_student_id
 -- BEFORE INSERT ON studentuser
