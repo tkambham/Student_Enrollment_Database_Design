@@ -153,7 +153,7 @@ if($usertype == 'student' || $usertype == 'studentadmin'){
   echo "</div>";
 
 
-    echo "<div style='width: 90%; padding: 30px; margin-right: 20px; margin-top:40px;'>";
+    echo "<div style='width: 95%; padding: 30px; margin-right: 20px; margin-top:40px;'>";
         echo "<h2 style='font-family: Arial, sans-serif; color: #333;'>All Courses</h2>";
         echo "<table border='1' style='border-collapse: collapse; width: 100%;'>";
         echo "<tr>";
@@ -166,6 +166,7 @@ if($usertype == 'student' || $usertype == 'studentadmin'){
         echo "<th style = 'padding: 10px'>Enroll Deadline</th>";
         echo "<th style = 'padding: 10px'>Capacity</th>";
         echo "<th style = 'padding: 10px'>Seats Available</th>";
+        echo "<th style = 'padding: 10px'>PreReq Courses</th>";
         echo "<th style = 'padding: 10px'>Enroll</th>";
         echo "</tr>";
         foreach ($results_values as $values) {
@@ -187,6 +188,26 @@ if($usertype == 'student' || $usertype == 'studentadmin'){
             echo "<td>{$values[6]}</td>";
             echo "<td name=\"capacity\">{$values[7]}</td>";
             echo "<td>{$values[8]}</td>";
+            $sqlP = "SELECT prerequisitecoursenumber FROM prerequisiteCourse WHERE coursenumber = '{$values[1]}'";
+
+            $result_arrayP = execute_sql_in_oracle($sqlP);
+            $resultP = $result_arrayP["flag"];
+            $cursorP = $result_arrayP["cursor"];
+
+            $prerequisiteCourses = [];
+            while ($valuesP = oci_fetch_array($cursorP)) {
+                $prerequisiteCourses[] = $valuesP;
+            }
+            oci_free_statement($cursorP);
+            if (count($prerequisiteCourses) > 0) {
+                echo "<td>";
+                foreach ($prerequisiteCourses as $prereq) {
+                    echo $prereq[0] . ", ";
+                }
+                echo "</td>";
+            } else {
+                echo "<td></td>";
+            }
             echo "<td><button type=\"submit\">Enroll</button></td>";
             echo "</tr>";
             echo "</form>";

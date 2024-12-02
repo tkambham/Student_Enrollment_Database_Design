@@ -21,8 +21,8 @@ $today = date("Y-m-d");
 
 // Check if the student is already enrolled in the course.
 if($enrollmentDeadline < $today){
-  echo "The enrollment deadline date($enrollmentDeadline) for this course has passed. <br />";
-  echo "You cannot enroll in this course. <br />";
+  echo "<strong>The enrollment deadline date($enrollmentDeadline) for this course has passed.</strong> <br />";
+  echo "<em>You cannot enroll in this course.</em> <br />";
   echo '<form method="post" action="student_course_enrollment_page.php?sessionid=' . $sessionid . '" style="text-align: center;">
           <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
         </form>';
@@ -40,7 +40,8 @@ else{
     $grade = $values[0];
 
     if($values != oci_fetch_array ($cursor) || $grade == 'D' || $grade == 'F'){
-      echo "You are already enrolled in this course. <br />";
+      echo "<strong>You are already enrolled or completed in this course.</strong> <br />";
+      echo "<em>You cannot enroll in this course.</em> <br />";
       echo '<form method="post" action="student_course_enrollment_page.php?sessionid=' . $sessionid . '" style="text-align: center;">
               <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
             </form>';
@@ -48,8 +49,8 @@ else{
     }
     else{
         if($seatsAvailable == 0){
-          echo "The course is full. <br />";
-          echo "You cannot enroll in this course. <br />";
+          echo "<strong>No seats available for this course.</strong> <br />";
+          echo "<em>You cannot enroll in this course.</em> <br />";          
           echo '<form method="post" action="student_course_enrollment_page.php?sessionid=' . $sessionid . '" style="text-align: center;">
                   <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
                 </form>';
@@ -87,9 +88,9 @@ else{
           }
 
           if($k != count($prerequisiteCourses)){
-            echo "You have not completed the prerequisite course for this course. <br />";
-            echo "</ul>";
-            echo "You cannot enroll in this course. <br />";
+            echo "<strong>You have not completed the prerequisite course for this course.</strong> <br />";
+            echo "<strong>Please check the prerequisite table on the enrollment page for the course. </strong> <br />";
+            echo "<em>You cannot enroll in this course.</em> <br />";
             echo '<form method="post" action="student_course_enrollment_page.php?sessionid=' . $sessionid . '" style="text-align: center;">
                     <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
                   </form>';
