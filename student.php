@@ -1,39 +1,27 @@
 <?
 include "verifysession.php";
 
+// check if the session is valid
 $sessionid =$_GET["sessionid"];
 verify_session($sessionid);
 
-
-$sql_studentview = "CREATE OR REPLACE VIEW studentview AS " .
-       "SELECT usertable.username, usertable.firstname, usertable.lastname, usertable.usertype, usersession.sessionid, studentuser.studentID, studentuser.age, studentuser.address, studentuser.studenttype, studentuser.status, studentuser.admissiondate ".
-       "FROM usertable ".
-       "JOIN usersession ON usertable.username = usersession.username ".
-       "JOIN studentuser ON usertable.username = studentuser.username";
-
-$result_array = execute_sql_in_oracle($sql_studentview);
-$result = $result_array["flag"];
-$cursor = $result_array["cursor"];
-
-if ($result == false) {
-    display_oracle_error_message($cursor);
-    die("SQL Execution problem while creating view.");
-}
-oci_free_statement($cursor);
-
+// get the username and usertype from the session
 $sql = "SELECT usertype, username ".
        "FROM studentview ".
        "WHERE sessionid='$sessionid'";
 
+// execute SQL statement
 $result_array = execute_sql_in_oracle ($sql);
 $result = $result_array["flag"];
 $cursor = $result_array["cursor"];
 
+// check the result
 if ($result == false){
   display_oracle_error_message($cursor);
   die("SQL Execution problem.");
 }
 
+// fetch the result
 if($values = oci_fetch_array ($cursor)){
   oci_free_statement($cursor);
 
@@ -45,6 +33,7 @@ if($values = oci_fetch_array ($cursor)){
 // Here we can generate the content of the welcome page
  
 echo("Hello, $username <br /><br />");
+
 
 if($usertype == 'student' || $usertype == 'studentadmin'){
   echo("<br />");

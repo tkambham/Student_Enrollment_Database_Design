@@ -100,7 +100,7 @@ if($usertype == 'admin' || $usertype == 'studentadmin'){
     }
 
     if (isset($q_cnum) and trim($q_cnum)!= "") {
-        $whereClause .= " and studentuser.coursenumber like '%$q_cnum%'"; 
+        $whereClause .= " and section.coursenumber like '%$q_cnum%'"; 
     }
 
     if (isset($q_stype) and $q_stype!= "") {
@@ -118,10 +118,12 @@ if($usertype == 'admin' || $usertype == 'studentadmin'){
     echo("<br />");
     echo("<br />");
 
-    $sql = "SELECT usertable.usertype, usertable.username, usertable.firstname, usertable.lastname, studentuser.admissiondate, adminuser.startdate ".
+    $sql = "SELECT DISTINCT usertable.usertype, usertable.username, usertable.firstname, usertable.lastname, studentuser.admissiondate, adminuser.startdate ".
     "FROM usertable ".
     "LEFT JOIN studentuser ON usertable.username = studentuser.username ".
     "LEFT JOIN adminuser ON usertable.username = adminuser.username ".
+    "LEFT JOIN enroll ON studentuser.studentID = enroll.studentID " .
+    "LEFT JOIN section ON enroll.sectionID = section.sectionID " .
     "WHERE $whereClause";
 
     $result_array = execute_sql_in_oracle ($sql);
