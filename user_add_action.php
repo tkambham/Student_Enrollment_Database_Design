@@ -1,6 +1,12 @@
 <?
     include "verifysession.php";
 
+    $connection = oci_connect ("gq075", "vmwspp", "gqiannew3:1521/orc.uco.local");
+    if ($connection == false){
+    $e = oci_error(); 
+    die($e['message']);
+    }
+
     $sessionid =$_GET["sessionid"];
     verify_session($sessionid);
 
@@ -31,6 +37,33 @@
         die("Please fill out all required fields.");
     }
 
+    $sqlP = "
+    BEGIN 
+        create_student_id(:lastname, :studentID);
+    END;
+    ";
+
+    $cursor = oci_parse($connection, $sqlP);
+    if ($cursor == false) {
+        $e = oci_error($connection);  
+        die($e['message']);
+    }
+
+    oci_bind_by_name($cursor, ':lastname', $lastname, 20); 
+    oci_bind_by_name($cursor, ':studentID', $studentID, 8); 
+
+    $result = oci_execute($cursor, OCI_NO_AUTO_COMMIT);
+    if ($result == false) {
+        $e = oci_error($cursor);  
+        die($e['message']);
+    }
+
+    echo "Student ID: $studentID";
+
+    oci_commit($connection);
+    oci_free_statement($cursor);
+
+
     if($usertype == "admin"){
         $startdate = $_POST["sdate"];
         if($startdate == ""){
@@ -56,6 +89,10 @@
             $address = "NULL";
             die("Address is required.");
         }
+        if($studentID == ""){
+            $studenttype = "NULL";
+            die("Couldn't generate Student ID.");
+        }
     }
     else if($usertype == "studentadmin"){
         $startdate = $_POST["sdate"];
@@ -80,28 +117,10 @@
             $address = "NULL";
             die("Address is required.");
         }
-    }
-
-    $sqlP = "
-            BEGIN 
-                create_student_id(:lastname, :studentID);
-            END;";
-
-    $stmtP = execute_sql_in_oracle($sqlP);
-
-    oci_bind_by_name($stmtP, ' :lastname', $lname, 20);
-    oci_bind_by_name($stmtP, ' :studentID', $studentID, 8);
-
-    $lname = $lastname;
-    $studentID = 0;
-
-    echo $studentID;
-
-    $resultP = oci_execute($stmtP);
-
-    if($resultP == false){
-        display_oracle_error_message($stmtP);
-        die("SQL Execution problem.");
+        if($studentID == ""){
+            $studenttype = "NULL";
+            die("Couldn't generate Student ID.");
+        }
     }
 
     if($usertype == "admin"){
