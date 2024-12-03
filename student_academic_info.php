@@ -120,7 +120,7 @@ if($usertype == 'student' || $usertype == 'studentadmin') {
         echo "<th style = 'padding: 10px'>Credit Hours</th>";
         echo "</tr>";
         foreach ($results_values as $values) {
-            if($values[3] == 'Fall 2024')
+            if($values[3] == 'Fall 2024' && $values[5] == NULL)
             {   
                 echo "<tr>";
                 echo "<td style = 'padding: 5px'>{$values[0]}</td>";
@@ -153,7 +153,7 @@ if($usertype == 'student' || $usertype == 'studentadmin') {
         echo "<th style = 'padding: 10px'>Grade</th>";
         echo "</tr>";
         foreach ($results_values as $values) {
-            if($values[3] != 'Fall 2024')
+            if($values[5] != '')
             {   
                 echo "<tr>";
                 echo "<td style = 'padding: 5px'>{$values[0]}</td>";
