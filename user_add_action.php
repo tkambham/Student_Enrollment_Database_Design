@@ -91,8 +91,21 @@
                 die("Address is required.");
             }
             if(empty($studentID)){
-                $studenttype = "NULL";
+                $studentID = "NULL";
                 die("Couldn't generate Student ID.");
+            }
+            if ($studenttype == "Undergraduate") {
+                $standing = $_POST["standing"];
+                if ($standing == "") {
+                    $standing = "NULL";
+                    die("Standing is required.");
+                }
+            } elseif ($studenttype == "Graduate") {
+                $concentration = $_POST["concentration"];
+                if ($concentration == "") {
+                    $concentration = "NULL";
+                    die("Concentration is required.");
+                }
             }
         }
         else if($usertype == "studentadmin"){
@@ -119,10 +132,26 @@
                 die("Address is required.");
             }
             if(empty($studentID)){
-                $studenttype = "NULL";
+                $studentID = "NULL";
                 die("Couldn't generate Student ID.");
             }
+            if ($studenttype == "Undergraduate") {
+                $standing = $_POST["standing"];
+                if ($standing == "") {
+                    $standing = "NULL";
+                    die("Standing is required.");
+                }
+            } elseif ($studenttype == "Graduate") {
+                $concentration = $_POST["concentration"];
+                if ($concentration == "") {
+                    $concentration = "NULL";
+                    die("Concentration is required.");
+                }
+            }
         }
+        echo "Student ID: $studentID";
+        echo "Concentration: $concentration";
+        echo "Standing: $standing";
 
         if($usertype == "admin"){
             $sql = "INSERT INTO usertable (usertype, password, username, firstname, lastname) VALUES ('$usertype', '$password', '$username', '$firstname', '$lastname')";
@@ -131,11 +160,23 @@
         else if($usertype == "student"){
             $sql = "INSERT INTO usertable (usertype, password, username, firstname, lastname) VALUES ('$usertype', '$password', '$username', '$firstname', '$lastname')";
             $sql2 = "INSERT INTO studentuser (studentID, age, address, studenttype, status, username, admissiondate) VALUES ( '$studentID', '$age', '$address', '$studenttype', '$status','$username', to_date('$admissiondate', 'mm/dd/yyyy'))";
+            if($studenttype == "Undergraduate"){
+                $sql3 = "INSERT INTO underGraduateStudent (studentID, standing) VALUES ('$studentID', '$standing')";
+            }
+            else if($studenttype == "Graduate"){
+                $sql3 = "INSERT INTO graduateStudent (studentID, concentration) VALUES ('$studentID', '$concentration')";
+            }
         }
         else if($usertype == "studentadmin"){
             $sql = "INSERT INTO usertable (usertype, password, username, firstname, lastname) VALUES ('$usertype', '$password', '$username', '$firstname', '$lastname')";
             $sql2 = "INSERT INTO studentuser (studentID, age, address, studenttype, status, username, admissiondate) VALUES ( '$studentID', '$age', '$address', '$studenttype', '$status','$username', to_date('$admissiondate', 'mm/dd/yyyy'))";
             $sql3 = "INSERT INTO adminuser (username, startdate) VALUES ('$username', to_date('$startdate', 'mm/dd/yyyy'))";
+            if($studenttype == "Undergraduate"){
+                $sql4 = "INSERT INTO underGraduateStudent (studentID, standing) VALUES ('$studentID', '$standing')";
+            }
+            else if($studenttype == "Graduate"){
+                $sql4 = "INSERT INTO graduateStudent (studentID, concentration) VALUES ('$studentID', '$concentration')";
+            }
         }
 
         $result_array = execute_sql_in_oracle ($sql);
@@ -150,12 +191,19 @@
         $result3 = $result_array3["flag"];
         $cursor3 = $result_array3["cursor"];
 
-        if($result == false || $result2 == false || $result3 == false){
+        if($usertype == "studentadmin"){
+            $result_array4 = execute_sql_in_oracle ($sql4);
+            $result4 = $result_array4["flag"];
+            $cursor4 = $result_array4["cursor"];
+        }
+
+        if($result == false || $result2 == false || $result3 == false || $result4 == false){
             // Error handling interface.
             echo "<B>insertion Failed.</B> <BR />";
             display_oracle_error_message($cursor);
             display_oracle_error_message($cursor2);
             display_oracle_error_message($cursor3);
+            display_oracle_error_message($cursor4);
             die("<i> 
         
                 <form method=\"post\" action=\"user_add?sessionid=$sessionid\">
@@ -166,6 +214,12 @@
                 <input type=\"hidden\" value = \"$admissiondate\" name=\"adate\">
                 <input type=\"hidden\" value = \"$startdate\" name=\"sdate\">
                 <input type=\"hidden\" value = \"$password\" name=\"password\">
+                <input type=\"hidden\" value = \"$age\" name=\"age\">
+                <input type=\"hidden\" value = \"$address\" name=\"address\">
+                <input type=\"hidden\" value = \"$studenttype\" name=\"studenttype\">
+                <input type=\"hidden\" value = \"$concentration\" name=\"concentration\">
+                <input type=\"hidden\" value = \"$standing\" name=\"standing\">
+                <input type=\"hidden\" value = \"$usertype\" name=\"usertype\">
                 
                 Read the error message, and then try again:
                 <input type=\"submit\" value=\"Go Back\">
@@ -179,6 +233,7 @@
         oci_free_statement($cursor);
         oci_free_statement($cursor2);
         oci_free_statement($cursor3);
+        oci_free_statement($cursor4);
         echo "<b>User added successfully.</b>";
         echo '<form method="post" action="admin.php?sessionid=' . $sessionid . '" style="text-align: center;">
             <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
@@ -198,6 +253,7 @@
         if (isset($cursor)) oci_free_statement($cursor);
         if (isset($cursor2)) oci_free_statement($cursor2);
         if (isset($cursor3)) oci_free_statement($cursor3);
+        if (isset($cursor4)) oci_free_statement($cursor4);
         oci_close($connection);
         Header("Location:admin.php?sessionid=$sessionid");
     }
