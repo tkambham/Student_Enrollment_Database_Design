@@ -34,6 +34,13 @@
         $usertype = $values[8];
     }
 
+    if($status == 'N'){
+        $statusprint = 'Good Standing';
+    }
+    else{
+        $statusprint = 'Probation';
+    }
+
     $sql2 = "SELECT enroll.sectionID, section.coursenumber, course.courseTitle, enroll.grade, section.semester " .
             "FROM enroll " .
             "JOIN section ON enroll.sectionID = section.sectionID " .
@@ -58,7 +65,7 @@
                 echo "<div style='margin-bottom: 10px;'><strong>Student ID       :</strong> $studentID</div>";
                 echo "<div style='margin-bottom: 10px;'><strong>Name             :</strong> $name</div>";
                 echo "<div style='margin-bottom: 10px;'><strong>Student Type     :</strong> $studenttype</div>";
-                echo "<div style='margin-bottom: 10px;'><strong>Probation Status :</strong> $status</div>";
+                echo "<div style='margin-bottom: 10px;'><strong>Probation Status :</strong> $statusprint</div>";
                 echo "<div style='margin-bottom: 10px;'><strong>Username         :</strong> $username</div>";
             echo "</div>"; 
 

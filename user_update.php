@@ -68,12 +68,17 @@ if (!isset($_POST["update_fail"])) { // from user.php
     $studentID = $_POST["studentID"];
     $age = $_POST["age"];
     $address = $_POST["address"];
-    $type = $_POST["studenttype"];
+    $type = $_POST["type"];
     $status = $_POST["status"];
     $sdate = $_POST["startdate"];
     $concentration = $_POST["concentration"];
     $standing = $_POST["standing"];
   }
+
+  $timestamp = strtotime($adate);
+  $adate = date("m/d/Y", $timestamp);
+  $timestamp = strtotime($sdate);
+  $sdate = date("m/d/Y", $timestamp);
 
 // Display the record to be updated.
 if($utype == 'admin'){
@@ -83,6 +88,8 @@ if($utype == 'admin'){
         <label for=\"uname\" style=\"font-weight: bold;\">UserName (Read-only):</label>
         <input type=\"text\" readonly value=\"$uname\" size=\"20\" maxlength=\"20\" name=\"uname\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
       </div>
+      <input type=\"hidden\" readonly value=\"$utype\" size=\"20\" maxlength=\"20\" name=\"utype\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
+      <input type=\"hidden\" readonly value=\"$type\" size=\"20\" maxlength=\"20\" name=\"type\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
       <div style=\"margin-bottom: 10px;\">
         <label for=\"fname\" style=\"font-weight: bold;\">Firstname (Required):</label>
         <input type=\"text\" value=\"$fname\" size=\"20\" maxlength=\"20\" name=\"fname\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
@@ -96,7 +103,7 @@ if($utype == 'admin'){
         <input type=\"text\" value=\"$sdate\" size=\"10\" maxlength=\"10\" name=\"sdate\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
       </div>
       <div style=\"text-align: center;\">
-          <input type=\"submit\" value=\"Update\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;\">
+        <input type=\"submit\" value=\"Update\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;\">
         <input type=\"reset\" value=\"Reset to Original Value\" style=\"background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;\">
       </div>
     </form>
@@ -113,6 +120,8 @@ else if($utype == 'student'){
         <label for=\"uname\" style=\"font-weight: bold;\">UserName (Read-only):</label>
         <input type=\"text\" readonly value=\"$uname\" size=\"20\" maxlength=\"20\" name=\"uname\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
       </div>
+      <input type=\"hidden\" readonly value=\"$utype\" size=\"20\" maxlength=\"20\" name=\"utype\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
+      <input type=\"hidden\" readonly value=\"$type\" size=\"20\" maxlength=\"20\" name=\"type\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
       <div style=\"margin-bottom: 10px;\">
         <label for=\"studentID\" style=\"font-weight: bold;\">StudentID (Read-only):</label>
         <input type=\"text\" readonly value=\"$studentID\" size=\"20\" maxlength=\"20\" name=\"studentID\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
@@ -173,6 +182,8 @@ else if($utype == 'studentadmin'){
         <label for=\"uname\" style=\"font-weight: bold;\">UserName (Read-only):</label>
         <input type=\"text\" readonly value=\"$uname\" size=\"20\" maxlength=\"20\" name=\"uname\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
       </div>
+      <input type=\"hidden\" readonly value=\"$utype\" size=\"20\" maxlength=\"20\" name=\"utype\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
+      <input type=\"hidden\" readonly value=\"$type\" size=\"20\" maxlength=\"20\" name=\"type\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">
       <div style=\"margin-bottom: 10px;\">
         <label for=\"studentID\" style=\"font-weight: bold;\">StudentID (Read-only):</label>
         <input type=\"text\" readonly value=\"$studentID\" size=\"20\" maxlength=\"20\" name=\"studentID\" style=\"width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;\">

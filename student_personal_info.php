@@ -32,6 +32,13 @@ if($values = oci_fetch_array ($cursor)){
     $usertype = $values[8];
 }
 
+if($status == 'N'){
+    $statusprint = 'Good Standing';
+}
+else{
+    $statusprint = 'Probation';
+}
+
 // Here we can generate the content of the welcome page
 echo("Hello, $username <br /><br />");
 
@@ -46,7 +53,7 @@ if($usertype == 'student' || $usertype == 'studentadmin'){
     echo "<div style='margin-bottom: 10px;'><strong>Age              :</strong> $age</div>";
     echo "<div style='margin-bottom: 10px;'><strong>Address          :</strong> $address</div>";
     echo "<div style='margin-bottom: 10px;'><strong>Student Type     :</strong> $studenttype</div>";
-    echo "<div style='margin-bottom: 10px;'><strong>Probation Status :</strong> $status</div>";
+    echo "<div style='margin-bottom: 10px;'><strong>Probation Status :</strong> $statusprint</div>";
     echo "<div style='margin-bottom: 10px;'><strong>Username         :</strong> $username</div>";
 
     echo "</div>"; 

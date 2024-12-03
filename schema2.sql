@@ -99,13 +99,21 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER insert_seats_available
-BEFORE INSERT OR DELETE ON enroll
+BEFORE INSERT ON enroll
 FOR EACH ROW
 BEGIN
     IF INSERTING THEN
         UPDATE section SET seatsAvailable = seatsAvailable - 1 WHERE sectionID = :new.sectionID;
-    ELSIF DELETING THEN
-        UPDATE section SET seatsAvailable = seatsAvailable + 1 WHERE sectionID = :new.sectionID;
+    END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER delete_seats_available
+AFTER DELETE ON enroll
+FOR EACH ROW
+BEGIN
+    IF DELETING THEN
+        UPDATE section SET seatsAvailable = seatsAvailable + 1 WHERE sectionID = :old.sectionID;
     END IF;
 END;
 /
@@ -115,24 +123,82 @@ CREATE OR REPLACE PROCEDURE create_student_id(
     studentID OUT VARCHAR2
 )
 AS
-  v_sequence VARCHAR2(8);
-  v_initials VARCHAR2(2);
-  v_number_part NUMBER;
+    v_initials VARCHAR2(2);
+    v_number_part NUMBER;
+    v_count NUMBER;
 BEGIN
-  v_initials := UPPER(SUBSTR(lastname, 1, 2));
-  
-  SELECT MAX(studentID) INTO v_sequence FROM studentuser;
-  
-  IF v_sequence IS NULL THEN
-    v_sequence := '123456';
-    v_number_part := TO_NUMBER(SUBSTR(v_sequence, 3)) + 1;
-  ELSE
-    v_number_part := TO_NUMBER(REGEXP_SUBSTR(v_sequence, '\d+', 1, 1)) + 1;
-  END IF;
-  
-  studentID := v_initials || TO_CHAR(v_number_part);
+    v_initials := UPPER(SUBSTR(lastname, 1, 2));
+
+    SELECT COUNT(studentID) INTO v_count FROM studentuser;
+
+    v_number_part := v_count + 123456;
+
+    studentID := v_initials || TO_CHAR(v_number_part);
+
   DBMS_OUTPUT.PUT_LINE('Generated studentID: ' || studentID);
 END;
 /
+SHOW ERRORS;
+
+-- CREATE OR REPLACE TRIGGER generate_student_id
+-- BEFORE INSERT ON studentuser
+-- FOR EACH ROW
+-- BEGIN
+--     create_student_id(:new.lastname, :new.studentID);
+-- END;
+-- /
+
+CREATE OR REPLACE PROCEDURE get_probation_status(
+    p_studentID IN VARCHAR2
+)
+IS
+    gps_gpa NUMBER(3,2);
+    gps_course_count NUMBER(3);
+BEGIN
+    SELECT ROUND(SUM(
+            CASE 
+                WHEN e.grade = 'A' THEN 4 * c.creditHours
+                WHEN e.grade = 'B' THEN 3 * c.creditHours
+                WHEN e.grade = 'C' THEN 2 * c.creditHours
+                WHEN e.grade = 'D' THEN 1 * c.creditHours
+                WHEN e.grade = 'F' THEN 0 * c.creditHours
+                ELSE 0
+            END
+        ) / 
+        NULLIF(SUM(
+            CASE 
+                WHEN e.grade IN ('A', 'B', 'C', 'D', 'F') THEN c.creditHours
+                ELSE 0
+            END
+        ), 0), 2) INTO gps_gpa
+    FROM studentview sv
+    LEFT JOIN enroll e ON sv.studentID = e.studentID
+    LEFT JOIN section s ON e.sectionID = s.sectionID
+    LEFT JOIN course c ON s.coursenumber = c.coursenumber
+    WHERE sv.studentID = p_studentID;
+
+
+    SELECT COUNT(DISTINCT c.coursenumber) INTO gps_course_count
+    FROM studentview sv
+    LEFT JOIN enroll e ON sv.studentID = e.studentID
+    LEFT JOIN section s ON e.sectionID = s.sectionID
+    LEFT JOIN course c ON s.coursenumber = c.coursenumber
+    WHERE sv.studentID = p_studentID
+    AND e.grade IS NOT NULL;
+
+    IF gps_gpa = 0.0 AND gps_course_count = 0 THEN
+        UPDATE studentuser su SET su.status = 'N' WHERE su.studentID = p_studentID;
+    ELSIF gps_gpa = 2.0 AND gps_course_count != 0 THEN
+        UPDATE studentuser su SET su.status = 'P' WHERE su.studentID = p_studentID;
+    ELSIF gps_gpa < 2.0 THEN
+        UPDATE studentuser su SET su.status = 'P' WHERE su.studentID = p_studentID;
+    ELSE
+        UPDATE studentuser su SET su.status = 'N' WHERE su.studentID = p_studentID;
+    END IF;
+END get_probation_status;
+/
+SHOW ERRORS;
+
+
 
 COMMIT;

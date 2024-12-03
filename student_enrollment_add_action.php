@@ -12,19 +12,17 @@ $sectionID = $_POST["sectionid"];
 $coursenumber = $_POST["coursenumber"];
 $enrollmentDeadline = $_POST["enrolldeadline"];
 $seatsAvailable = $_POST["seatsavailable"];
+$semester = $_POST["semester"];
 
 $timestamp = strtotime($enrollmentDeadline);
 
 $enrollmentDeadline = date("Y-m-d", $timestamp);
 $today = date("Y-m-d");
 
-echo "enrollmentDeadline: $enrollmentDeadline <br />";  
-echo "Todays date: $todayTimestamp <br />";
-
 // Check if the student is already enrolled in the course.
 if($enrollmentDeadline < $today){
-  echo "The enrollment deadline date($enrollmentDeadline) for this course has passed. <br />";
-  echo "You cannot enroll in this course. <br />";
+  echo "<strong>The enrollment deadline date($enrollmentDeadline) for this course has passed.</strong> <br />";
+  echo "<em>You cannot enroll in this course.</em> <br />";
   echo '<form method="post" action="student_course_enrollment_page.php?sessionid=' . $sessionid . '" style="text-align: center;">
           <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
         </form>';
@@ -42,7 +40,8 @@ else{
     $grade = $values[0];
 
     if($values != oci_fetch_array ($cursor) || $grade == 'D' || $grade == 'F'){
-      echo "You are already enrolled in this course. <br />";
+      echo "<strong>You are already enrolled or completed in this course.</strong> <br />";
+      echo "<em>You cannot enroll in this course.</em> <br />";
       echo '<form method="post" action="student_course_enrollment_page.php?sessionid=' . $sessionid . '" style="text-align: center;">
               <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
             </form>';
@@ -50,12 +49,53 @@ else{
     }
     else{
         if($seatsAvailable == 0){
-          echo "The course is full. <br />";
-          echo "You cannot enroll in this course. <br />";
+          echo "<strong>No seats available for this course.</strong> <br />";
+          echo "<em>You cannot enroll in this course.</em> <br />";          
           echo '<form method="post" action="student_course_enrollment_page.php?sessionid=' . $sessionid . '" style="text-align: center;">
                   <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
                 </form>';
           die();
+        }
+        else{
+          $sqlP = "SELECT prerequisitecoursenumber FROM prerequisiteCourse WHERE coursenumber = '$coursenumber'";
+          $result_arrayP = execute_sql_in_oracle($sqlP);
+          $resultP = $result_arrayP["flag"];
+          $cursorP = $result_arrayP["cursor"];
+
+          $prerequisiteCourses = [];
+          while ($valuesP = oci_fetch_array($cursorP)) {
+              $prerequisiteCourses[] = $valuesP['prerequisitecoursenumber'];
+          }
+
+          $sqlC = "SELECT section.coursenumber FROM enroll ".
+              "JOIN section ON enroll.sectionID = section.sectionID ".
+              "WHERE enroll.studentID = '$studentID' AND enroll.grade != 'F' AND enroll.grade != ''";
+          $result_arrayC = execute_sql_in_oracle($sqlC);
+          $resultC = $result_arrayC["flag"];
+          $cursorC = $result_arrayC["cursor"];
+
+
+          $completedCourses = [];
+          while ($valuesC = oci_fetch_array($cursorC)) {
+              $completedCourses[] = $valuesC['coursenumber'];
+          }
+
+          $k = 0;
+          foreach ($prerequisiteCourses as $prerequisiteCourse) {
+              if (in_array($prerequisiteCourse, $completedCourses)) {
+                  $k++; 
+              }
+          }
+
+          if($k != count($prerequisiteCourses)){
+            echo "<strong>You have not completed the prerequisite course for this course.</strong> <br />";
+            echo "<strong>Please check the prerequisite table on the enrollment page for the course. </strong> <br />";
+            echo "<em>You cannot enroll in this course.</em> <br />";
+            echo '<form method="post" action="student_course_enrollment_page.php?sessionid=' . $sessionid . '" style="text-align: center;">
+                    <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                  </form>';
+            die();
+          }
         }
     }
 }
