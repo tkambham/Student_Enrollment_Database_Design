@@ -331,26 +331,26 @@ INSERT INTO enroll VALUES ('LI123456', '23S112', 'A');
 INSERT INTO enroll VALUES ('LI123456', '24S204', 'A'); 
 INSERT INTO enroll VALUES ('LI123456', '24S210', 'C'); 
 INSERT INTO enroll VALUES ('LI123456', '24S211', 'B'); 
-INSERT INTO enroll VALUES ('LI123456', '24S102', ''); 
-INSERT INTO enroll VALUES ('LI123456', '24S106', ''); 
-INSERT INTO enroll VALUES ('LI123456', '24S115', ''); 
+INSERT INTO enroll(studentID, sectionID) VALUES ('LI123456', '24S102'); 
+INSERT INTO enroll(studentID, sectionID) VALUES ('LI123456', '24S106'); 
+INSERT INTO enroll(studentID, sectionID) VALUES ('LI123456', '24S115'); 
 
 INSERT INTO enroll VALUES ('SM123457', '24S210', 'A');  
 INSERT INTO enroll VALUES ('SM123457', '24S203', 'B');  
 INSERT INTO enroll VALUES ('SM123457', '24S202', 'B');  
-INSERT INTO enroll VALUES ('SM123457', '24S102', '');  
-INSERT INTO enroll VALUES ('SM123457', '24S107', '');  
-INSERT INTO enroll VALUES ('SM123457', '24S104', '');  
+INSERT INTO enroll(studentID, sectionID) VALUES ('SM123457', '24S102');  
+INSERT INTO enroll(studentID, sectionID) VALUES ('SM123457', '24S107');  
+INSERT INTO enroll(studentID, sectionID) VALUES ('SM123457', '24S104');  
 
-INSERT INTO enroll VALUES ('WA123458', '24S103', '');  
-INSERT INTO enroll VALUES ('WA123458', '24S102', '');  
-INSERT INTO enroll VALUES ('WA123458', '24S104', '');  
+INSERT INTO enroll(studentID, sectionID) VALUES ('WA123458', '24S103');  
+INSERT INTO enroll(studentID, sectionID) VALUES ('WA123458', '24S102');  
+INSERT INTO enroll(studentID, sectionID) VALUES ('WA123458', '24S104');  
 
 INSERT INTO enroll VALUES ('LA123459', '24S202', 'A');  
 INSERT INTO enroll VALUES ('LA123459', '24S203', 'B');  
 INSERT INTO enroll VALUES ('LA123459', '24S204', 'B');  
-INSERT INTO enroll VALUES ('LA123459', '24S102', '');  
-INSERT INTO enroll VALUES ('LA123459', '24S105', '');  
-INSERT INTO enroll VALUES ('LA123459', '24S104', '');  
+INSERT INTO enroll(studentID, sectionID) VALUES ('LA123459', '24S102');  
+INSERT INTO enroll(studentID, sectionID) VALUES ('LA123459', '24S105');  
+INSERT INTO enroll(studentID, sectionID) VALUES ('LA123459', '24S104');  
 
 commit;

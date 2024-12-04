@@ -35,6 +35,10 @@
         die();
     }
 
+    if($grade == ''){
+        $grade = NULL;
+    }
+
     $sql = "UPDATE enroll SET grade = '$grade' WHERE studentID = '$studentID' AND sectionID = '$sectionID'";
 
     $result_array = execute_sql_in_oracle ($sql);
