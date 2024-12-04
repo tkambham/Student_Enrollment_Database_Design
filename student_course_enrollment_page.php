@@ -71,7 +71,7 @@ if($values = oci_fetch_array ($cursor2)){
 }
 
 
-$sql3 = "SELECT enroll.sectionID, course.coursenumber, course.courseTitle, course.creditHours " .
+$sql3 = "SELECT DISTINCT enroll.sectionID, course.coursenumber, course.courseTitle, course.creditHours " .
        "FROM studentview " .
        "JOIN enroll ON studentview.studentID = enroll.studentID " .
        "JOIN section ON section.sectionID = enroll.sectionID " .
