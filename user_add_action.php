@@ -59,8 +59,6 @@
             die($e['message']);
         }
 
-        echo "Student ID: $studentID";
-
         oci_commit($connection);
         oci_free_statement($cursor);
 
@@ -149,9 +147,6 @@
                 }
             }
         }
-        echo "Student ID: $studentID";
-        echo "Concentration: $concentration";
-        echo "Standing: $standing";
 
         if($usertype == "admin"){
             $sql = "INSERT INTO usertable (usertype, password, username, firstname, lastname) VALUES ('$usertype', '$password', '$username', '$firstname', '$lastname')";
@@ -191,11 +186,9 @@
         $result3 = $result_array3["flag"];
         $cursor3 = $result_array3["cursor"];
 
-        if($usertype == "studentadmin"){
-            $result_array4 = execute_sql_in_oracle ($sql4);
-            $result4 = $result_array4["flag"];
-            $cursor4 = $result_array4["cursor"];
-        }
+        $result_array4 = execute_sql_in_oracle ($sql4);
+        $result4 = $result_array4["flag"];
+        $cursor4 = $result_array4["cursor"];
 
         if($result == false || $result2 == false || $result3 == false || $result4 == false){
             // Error handling interface.
@@ -222,11 +215,14 @@
                 <input type=\"hidden\" value = \"$usertype\" name=\"usertype\">
                 
                 Read the error message, and then try again:
-                <input type=\"submit\" value=\"Go Back\">
                 </form>
             
                 </i>
             ");
+            echo '<form method="post" action="admin.php?sessionid=' . $sessionid . '" style="text-align: center;">
+                <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                </form>';
+            echo "<br />";
         }
 
         oci_commit($connection);

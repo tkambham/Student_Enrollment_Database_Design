@@ -65,7 +65,7 @@ if($values = oci_fetch_array ($cursor)){
     $GPA = $values[6];
 }
 
-$sql2 = "SELECT section.sectionID, course.coursenumber, course.courseTitle, section.semester, course.creditHours, enroll.grade ".
+$sql2 = "SELECT DISTINCT section.sectionID, course.coursenumber, course.courseTitle, section.semester, course.creditHours, enroll.grade ".
         "FROM studentView ".
         "LEFT JOIN enroll ON studentView.studentID = enroll.studentID ".
         "LEFT JOIN section ON enroll.sectionID = section.sectionID ".
