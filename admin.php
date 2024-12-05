@@ -147,7 +147,7 @@ if($usertype == 'admin' || $usertype == 'studentadmin'){
         $lname = $values[3];
         $adate = $values[4];
         $sid = $values[5];
-        $sdate = $values[5];
+        $sdate = $values[6];
         echo("<tr>" . 
             "<td>$fname</td> <td>$lname</td> <td>$uname</td> <td>$utype</td> <td>$sid</td> <td>$sdate</td> <td>$adate</td>".
             " <td> <A HREF=\"user_update.php?sessionid=$sessionid&username=$uname\">Update</A> </td> ".
