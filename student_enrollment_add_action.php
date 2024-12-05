@@ -18,6 +18,10 @@ $studentID = $_POST["studentid"];
 $selectedCourses = $_POST["selected_courses"]; 
 $today = date("Y-m-d");
 
+echo $username;
+echo "<br />";
+echo $studentID;
+
 
 foreach ($selectedCourses as $sectionID) {
     
@@ -101,7 +105,7 @@ foreach ($selectedCourses as $sectionID) {
 
               $sqlC = "SELECT section.coursenumber FROM enroll ".
                   "JOIN section ON enroll.sectionID = section.sectionID ".
-                  "WHERE enroll.studentID = '$studentID' AND enroll.grade != 'F' AND enroll.grade != ''";
+                  "WHERE enroll.studentID = '$studentID' AND enroll.grade != 'F' AND enroll.grade != 'NULL'";
               $result_arrayC = execute_sql_in_oracle($sqlC);
               $resultC = $result_arrayC["flag"];
               $cursorC = $result_arrayC["cursor"];
