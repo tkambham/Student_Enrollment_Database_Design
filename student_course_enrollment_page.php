@@ -169,8 +169,11 @@ if($usertype == 'student' || $usertype == 'studentadmin'){
         echo "<th style = 'padding: 10px'>PreReq Courses</th>";
         echo "<th style = 'padding: 10px'>Enroll</th>";
         echo "</tr>";
+
+        $courseIds = [];
+
         foreach ($results_values as $values) {
-            echo "<form method=\"post\" action=\"student_enrollment_add_action.php?sessionid=$sessionid\">";
+            echo "<form method=\"post\" action=\"student_enrollment_add_action.php?sessionid=$sessionid\" id=\"enrollForm\">";
             echo "<tr>";
             echo "<input type=\"hidden\" name=\"username\" value=\"{$username}\">";
             echo "<input type=\"hidden\" name=\"studentid\" value=\"{$studentID}\">";
@@ -208,17 +211,68 @@ if($usertype == 'student' || $usertype == 'studentadmin'){
             } else {
                 echo "<td></td>";
             }
-            echo "<td><button type=\"submit\">Enroll</button></td>";
+            echo "<td style='text-align: center;'><input type=\"checkbox\" name=\"selected_courses[]\" value=\"{$values[0]}\" class=\"courseCheckbox\" onclick=\"toggleEnrollButton()\"></td>";
             echo "</tr>";
-            echo "</form>";
         }
         echo "</table>";
+        echo "<br>";
+        echo "<button style=\"background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; float: right;\" type=\"submit\" id=\"enrollButton\" disabled>Enroll</button>";
+        echo "</form>";
     echo "</div>";
 
     echo '<form method="post" action="student.php?sessionid=' . $sessionid . '" style="text-align: center;">
             <input type="submit" value="Go Back" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
           </form>';
     echo "<br />";
+
+    echo "<script>
+            function toggleEnrollButton() {
+                var checkboxes = document.getElementsByClassName('courseCheckbox');
+                var enrollButton = document.getElementById('enrollButton');
+                var checked = false;
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].checked) {
+                        checked = true;
+                        break;
+                    }
+                }
+                enrollButton.disabled = !checked;
+            }
+          </script>";
+
+    echo "<script>
+            document.getElementById('enrollForm').addEventListener('submit', function(event) {
+              const selectedCourses = [];
+              const checkboxes = document.querySelectorAll('.courseCheckbox:checked');
+              checkboxes.forEach(checkbox => selectedCourses.push(checkbox.value));
+
+              if (selectedCourses.length === 0) {
+                event.preventDefault();
+                alert('Please select at least one course to enroll.');
+              }
+
+              if (selectedCourses.length > 0) {
+              selectedCourses.forEach(courseId => {
+                  let input = document.createElement('input');
+                  input.type = 'hidden';
+                  input.name = 'selected_courses[]';
+                  input.value = '{$courseIds}';
+                  document.getElementById('enrollForm').appendChild(input);
+              });
+              let input2 = document.createElement('input');
+              input2.type = 'hidden';
+              input2.name = 'studentID';
+              input2.value = '{$studentID}';
+              document.getElementById('enrollForm').appendChild(input2);
+
+              let input3 = document.createElement('input');
+              input3.type = 'hidden';
+              input3.name = 'username';
+              input3.value = '{$username}';
+              document.getElementById('enrollForm').appendChild(input3);
+              }
+            }
+          </script>";
     }
     else{
       echo "You are not authorized to view this page.";
