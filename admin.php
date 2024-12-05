@@ -118,7 +118,7 @@ if($usertype == 'admin' || $usertype == 'studentadmin'){
     echo("<br />");
     echo("<br />");
 
-    $sql = "SELECT DISTINCT usertable.usertype, usertable.username, usertable.firstname, usertable.lastname, studentuser.admissiondate, adminuser.startdate ".
+    $sql = "SELECT DISTINCT usertable.usertype, usertable.username, usertable.firstname, usertable.lastname, studentuser.admissiondate, studentuser.studentID, adminuser.startdate ".
     "FROM usertable ".
     "LEFT JOIN studentuser ON usertable.username = studentuser.username ".
     "LEFT JOIN adminuser ON usertable.username = adminuser.username ".
@@ -137,7 +137,7 @@ if($usertype == 'admin' || $usertype == 'studentadmin'){
 
     // Display the query results
     echo "<table border=1>";
-    echo "<tr> <th>Firstname</th> <th>Lastname</th> <th>User Name</th> <th>User Type</th> <th>Start Date</th> <th>Admission Date</th> <th>Update</th> <th>Delete</th> <th>Update Grade</th></tr>";
+    echo "<tr> <th>Firstname</th> <th>Lastname</th> <th>User Name</th> <th>User Type</th> <th>StudentID</th> <th>Start Date</th> <th>Admission Date</th> <th>Update</th> <th>Delete</th> <th>Update Grade</th></tr>";
 
     // Fetch the result from the cursor one by one
     while ($values = oci_fetch_array ($cursor)){
@@ -146,9 +146,10 @@ if($usertype == 'admin' || $usertype == 'studentadmin'){
         $fname = $values[2];
         $lname = $values[3];
         $adate = $values[4];
+        $sid = $values[5];
         $sdate = $values[5];
         echo("<tr>" . 
-            "<td>$fname</td> <td>$lname</td> <td>$uname</td> <td>$utype</td> <td>$sdate</td> <td>$adate</td>".
+            "<td>$fname</td> <td>$lname</td> <td>$uname</td> <td>$utype</td> <td>$sid</td> <td>$sdate</td> <td>$adate</td>".
             " <td> <A HREF=\"user_update.php?sessionid=$sessionid&username=$uname\">Update</A> </td> ".
             " <td> <A HREF=\"user_delete.php?sessionid=$sessionid&username=$uname\">Delete</A> </td> ");
             if ($utype == 'student' || $utype == 'studentadmin') {
